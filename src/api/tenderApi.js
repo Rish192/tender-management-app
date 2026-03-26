@@ -1,11 +1,17 @@
 // src/api/tenderApi.js
+import axios from 'axios';
 
+const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 const STORAGE_KEY = "tenders_db";
 
 // 🔹 GET ALL
 export const getTenderListAPI = async () => {
-  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  return data;
+  const response = await axios.get(`${BASE_URL}/tenders`, {
+    headers: {
+      'Accept': 'application/json',
+    }
+  });
+  return response.data;
 };
 
 // 🔹 ADD

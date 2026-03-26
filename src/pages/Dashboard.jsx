@@ -25,17 +25,17 @@ const Dashboard = () => {
 
 
    useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const data = await getTenderListAPI();
-      setTenders(data || []); // ✅ correct usage
-    } catch (err) {
-      console.error("Fetch error:", err);
-    }
-  };
+    const loadTenders = async () => {
+      try {
+        const data = await getTenderListAPI();
+        setTenders(data || []); // ✅ correct usage
+      } catch (err) {
+        console.error("Failed to Fetch:", err);
+      }
+    };
 
-  fetchData();
-}, []);
+    loadTenders();
+  }, []);
 
   return (
     <Box display="flex" height="100vh" overflow="hidden">

@@ -7,6 +7,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useTenderStore } from "../../store/tenderStore";
 import { useUI } from "../../store/uiStore";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
 const TenderTable = () => {
   const { tenders } = useTenderStore();
@@ -21,14 +24,16 @@ const TenderTable = () => {
 
   // ✅ existing filter logic (UNCHANGED)
   const filtered = useMemo(() => {
-    return tenders.filter((t) => {
+    const tenderList = Array.isArray(tenders) ? tenders : [];
+    return tenderList.filter((t) => {
+      const filterName = filters.name?.toLowerCase() || "";
       const matchName =
-        !filters.name ||
-        t.name?.toLowerCase().includes(filters.name.toLowerCase());
+        !filterName ||
+        t.subject?.toLowerCase().includes(filterName);
 
       const matchDate =
         !filters.date ||
-        t.date === filters.date;
+        t.bid_due_date === filters.date;
 
       return matchName && matchDate;
     });
@@ -80,7 +85,7 @@ const TenderTable = () => {
         }}
       >
         {paginated.map((t, i) => (
-          <Box key={i}>
+          <Box key={t.tender_id}>
             {/* ROW */}
             <Box
               display="flex"
@@ -92,27 +97,27 @@ const TenderTable = () => {
                 background: i % 2 === 0 ? "#fafbff" : "#ffffff",
               }}
             >
-              <Box flex={1}>{t.number}</Box>
+              <Box flex={1}>{t.tender_number}</Box>
 
               <Box flex={3} sx={{ color: "#444" }}>
-                {t.name}
+                {t.subject}
               </Box>
 
-              <Box flex={2}>{t.dueDate}</Box>
-              <Box flex={2}>{t.validityEnd}</Box>
+              <Box flex={2}>{t.bid_due_date}</Box>
+              <Box flex={2}>{t.bid_validity_end_date}</Box>
               <Box flex={1}>{t.tat}</Box>
-              <Box flex={1}>{t.validity}</Box>
+              <Box flex={1}>{t.bid_validity}</Box>
 
               <Box flex={2} sx={{ color: "#666" }}>
-                {t.status}
+                {t.tender_status}
               </Box>
 
               {/* ✅ ACTIONS */}
               <Box flex={1} display="flex" gap={1}>
                 {/* 👁 VIEW */}
                 <IconButton
-                  onClick={() => navigate(`/tender/${t.id}`)} // 🔥 NAVIGATE
-                  disabled={t.status !== "Ready"} // 🔒 enabled only when Ready
+                  onClick={() => navigate(`/tender/${t.tender_id}`)}
+                  disabled={t.tender_status !== "RFP_DONE"}
                   size="small"
                   sx={{
                     background: "#2F4DB5",
