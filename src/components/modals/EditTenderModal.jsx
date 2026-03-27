@@ -19,6 +19,7 @@ import { useTenderStore } from "../../store/tenderStore";
 import {
   updateTenderAPI,
   uploadCBAAPI,
+  getTenderDetailsAPI
 } from "../../api/tenderApi";
 
 const sectionCard = {
@@ -53,14 +54,63 @@ const EditTenderModal = () => {
 
   const [params, setParams] = useState([]);
 
+  const [formData, setFormData] = useState({
+    tender_number: "",
+    tender_subject: "",
+    tender_publishing_date: "",
+    bid_due_date: "",
+    bid_opening_date: "",
+    total_emd: "",
+    avg_annual_turnover: "",
+    working_capital: "",
+    evaluation_methodology: ""
+  });
+
   // ================= INIT =================
   useEffect(() => {
-    if (editOpen && selectedTenderId) {
-      setTenderId(selectedTenderId);
-    }
+    const fetchDetails = async () => {
+      if (editOpen && selectedTenderId) {
+        setTenderId(selectedTenderId);
+        const data = await getTenderDetailsAPI(selectedTenderId);
+
+        if (data && data.tender_details) {
+          const details = data.tender_details;
+
+          const formatDateForInput = (dateStr) => {
+            if (!dateStr) return "";
+            const [date] = dateStr.split(" ");
+            const [day, month, year] = date.split("-");
+            return `${year}-${month}-${day}`;
+          }
+          setFormData({
+            tender_number: details.tender_number || "",
+            tender_subject: details.tender_subject || "",
+            tender_publishing_date: formatDateForInput(details.tender_publishing_date) || "",
+            bid_due_date: formatDateForInput(details.bid_due_date) || "",
+            bid_opening_date: formatDateForInput(details.bid_opening_date) || "",
+            total_emd: details.total_emd || "",
+            avg_annual_turnover: details.avg_annual_turnover || "",
+            working_capital: details.working_capital || "",
+            evaluation_methodology: details.evaluation_methodology || "",
+          });
+          if (details.domain && details.domain.length > 0) {
+            setRows(details.domain.map(d => ({
+              industry: d.industry || "",
+              s1: d.sector || "",
+              s2: ""
+            })));
+          }
+        }
+      }
+    };
+    fetchDetails();
   }, [editOpen, selectedTenderId]);
 
   // ================= HANDLERS =================
+  const handleChange = (field) => (e) => {
+    setFormData({ ...formData, [field]: e.target.value });
+  };
+
   const addRow = () =>
     setRows((p) => [...p, { industry: "", s1: "", s2: "" }]);
 
@@ -187,12 +237,12 @@ const EditTenderModal = () => {
 
           <Box display="grid" gridTemplateColumns="repeat(4,1fr)" gap={2}>
             <TextField label="Purchase / Service Requisition number(s)*" sx={inputStyle} />
-            <TextField label="Tender Number*" defaultValue="643647" sx={inputStyle} />
-            <TextField label="Tender Subject*" sx={inputStyle} />
-            <TextField type="date" label="Tender Publishing Date*" InputLabelProps={{ shrink: true }} sx={inputStyle} />
+            <TextField label="Tender Number*" value={formData.tender_number} onChange={handleChange("tender_number")} sx={inputStyle} />
+            <TextField label="Tender Subject*" value={formData.tender_subject} onChange={handleChange("tender_subject")} sx={inputStyle} />
+            <TextField type="date" label="Tender Publishing Date*" InputLabelProps={{ shrink: true }} value={formData.tender_publishing_date} onChange={handleChange("tender_publishing_date")} sx={inputStyle} />
 
-            <TextField type="date" label="Bid Due Date*" InputLabelProps={{ shrink: true }} sx={inputStyle} />
-            <TextField type="date" label="Bid Opening Date*" InputLabelProps={{ shrink: true }} sx={inputStyle} />
+            <TextField type="date" label="Bid Due Date*" InputLabelProps={{ shrink: true }} value={formData.bid_due_date} onChange={handleChange("bid_due_date")} sx={inputStyle} />
+            <TextField type="date" label="Bid Opening Date*" InputLabelProps={{ shrink: true }} value={formData.bid_opening_date} onChange={handleChange("bid_opening_date")} sx={inputStyle} />
             <TextField type="date" label="Bid Validity End Date*" InputLabelProps={{ shrink: true }} sx={inputStyle} />
           </Box>
 
@@ -200,7 +250,7 @@ const EditTenderModal = () => {
           <Box display="flex" gap={3} mt={3}>
             <Box flex={1} sx={{ background: "#dde6ec", p: 2, borderRadius: 2 }}>
               <Typography fontSize={13}>Earnest Money Deposit (INR)</Typography>
-              <TextField fullWidth defaultValue="5000000" sx={inputStyle} />
+              <TextField fullWidth value={formData.total_emd} onChange={handleChange("total_emd")} sx={inputStyle} />
               <Button fullWidth sx={{ mt: 1, background: "#2F4DB5", color: "#fff" }}>
                 View More
               </Button>
@@ -211,8 +261,8 @@ const EditTenderModal = () => {
 
               <Box display="flex" gap={2} mt={2}>
                 <TextField label="Net Worth (INR)" fullWidth sx={inputStyle} />
-                <TextField label="Average Annual Turnover (INR)" fullWidth sx={inputStyle} />
-                <TextField label="Working Capital (INR)" fullWidth sx={inputStyle} />
+                <TextField label="Average Annual Turnover (INR)" value={formData.avg_annual_turnover} onChange={handleChange("avg_annual_turnover")} fullWidth sx={inputStyle} />
+                <TextField label="Working Capital (INR)" value={formData.working_capital} onChange={handleChange("working_capital")} fullWidth sx={inputStyle} />
               </Box>
 
               <Button sx={{ mt: 2, background: "#2F4DB5", color: "#fff" }}>
@@ -233,10 +283,10 @@ const EditTenderModal = () => {
               <MenuItem>Not Applicable</MenuItem>
             </TextField>
 
-            <TextField select label="Evaluation Methodology*" sx={inputStyle}>
-              <MenuItem>Item Basis</MenuItem>
-              <MenuItem>Group Basis</MenuItem>
-              <MenuItem>Overall</MenuItem>
+            <TextField select label="Evaluation Methodology*" value={formData.evaluation_methodology} onChange={handleChange("evaluation_methodology")} sx={inputStyle}>
+              <MenuItem value="Item Basis">Item Basis</MenuItem>
+              <MenuItem value="Group Basis">Group Basis</MenuItem>
+              <MenuItem value="Overall">Overall</MenuItem>
             </TextField>
           </Box>
         </Box>
@@ -249,9 +299,21 @@ const EditTenderModal = () => {
 
           {rows.map((r, i) => (
             <Box key={i} display="flex" gap={2} mt={2} alignItems="center">
-              <TextField label="Industry" fullWidth sx={inputStyle} />
-              <TextField label="Sector 1" fullWidth sx={inputStyle} />
-              <TextField label="Sector 2" fullWidth sx={inputStyle} />
+              <TextField label="Industry" fullWidth value={r.industry} onChange={(e) => {
+                const newRows = [...rows];
+                newRows[i].industry = e.target.value;
+                setRows(newRows);
+              }} sx={inputStyle} />
+              <TextField label="Sector 1" fullWidth value={r.s1} onChange={(e) => {
+                const newRows = [...rows];
+                newRows[i].s1 = e.target.value;
+                setRows(newRows);
+              }} sx={inputStyle} />
+              <TextField label="Sector 2" fullWidth value={r.s2} onChange={(e) => {
+                const newRows = [...rows];
+                newRows[i].s2 = e.target.value;
+                setRows(newRows);
+              }} sx={inputStyle} />
 
               <IconButton onClick={() => removeRow(i)}>
                 <DeleteIcon color="error" />
@@ -267,7 +329,7 @@ const EditTenderModal = () => {
         </Box>
 
         {/* ================= PARAMETERS ================= */}
-        <Box sx={sectionCard}>
+        {/* <Box sx={sectionCard}>
           <Typography fontWeight={600} color="#2f4db5">
             Upload Tender Document
           </Typography>
@@ -300,7 +362,7 @@ const EditTenderModal = () => {
               </Box>
             </Box>
           ))}
-        </Box>
+        </Box> */}
 
         {/* ================= BULK UPLOAD ================= */}
         <Box sx={sectionCard}>

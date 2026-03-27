@@ -45,7 +45,7 @@ const TenderTable = () => {
 
   // ✅ FIXED EDIT HANDLER (IMPORTANT)
   const handleEdit = (t) => {
-    setSelectedTenderId(t.id); // 🔥 pass ID
+    setSelectedTenderId(t.tender_id); // 🔥 pass ID
     setEditOpen(true);
   };
 
@@ -64,11 +64,11 @@ const TenderTable = () => {
           fontWeight: 500,
         }}
       >
-        <Box flex={1}>Tender No.</Box>
-        <Box flex={3}>Subject</Box>
+        <Box flex={2}>Tender No.</Box>
+        {/* <Box flex={3}>Subject</Box> */}
         <Box flex={2}>Bid Due Date</Box>
-        <Box flex={2}>Bid Validity End Date</Box>
-        <Box flex={1}>TAT</Box>
+        {/* <Box flex={2}>Bid Validity End Date</Box>
+        <Box flex={1}>TAT</Box> */}
         <Box flex={1}>Bid Validity</Box>
         <Box flex={2}>Status</Box>
         <Box flex={1}>Actions</Box>
@@ -97,16 +97,16 @@ const TenderTable = () => {
                 background: i % 2 === 0 ? "#fafbff" : "#ffffff",
               }}
             >
-              <Box flex={1}>{t.tender_number}</Box>
+              <Box flex={2}>{t.tender_number}</Box>
 
-              <Box flex={3} sx={{ color: "#444" }}>
+              {/* <Box flex={3} sx={{ color: "#444" }}>
                 {t.subject}
-              </Box>
+              </Box> */}
 
               <Box flex={2}>{t.bid_due_date}</Box>
-              <Box flex={2}>{t.bid_validity_end_date}</Box>
-              <Box flex={1}>{t.tat}</Box>
-              <Box flex={1}>{t.bid_validity}</Box>
+              {/* <Box flex={2}>{t.bid_validity}</Box> */}
+              {/* <Box flex={1}>{t.tat}</Box> */}
+              <Box flex={1}>{t.Validity}</Box>
 
               <Box flex={2} sx={{ color: "#666" }}>
                 {t.tender_status}

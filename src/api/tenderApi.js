@@ -37,9 +37,16 @@ export const addTenderAPI = async (file) => {
 };
 
 // 🔹 GET ONE
-export const getTenderAPI = async (id) => {
-  const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  return tenders.find((t) => t.id === id);
+export const getTenderDetailsAPI = async (id) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/tender/${id}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching tender details:", err);
+    return null;
+  }
 };
 
 // 🔹 UPDATE (SAVE DRAFT)
