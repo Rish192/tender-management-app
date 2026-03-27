@@ -34,37 +34,22 @@ const UploadTenderModal = () => {
     }
 
     try {
-      // ✅ Save to localStorage (mock API)
-      await addTenderAPI(file);
+      const res = await addTenderAPI(file);
 
-      showNotification("Document upload queue initiated successfully");
+      if (res.status === "success") {
+        showNotification("Document upload queue initiated successfully");
+      }
 
-      // ✅ Refresh list from storage
       const data = await getTenderListAPI();
-      setTenders(data);
+      setTenders(data || []);
 
       setUploadOpen(false);
       setFile(null);
 
-      // 🟢 Simulate extraction → update status later
-      setTimeout(async () => {
-        showNotification("Tender extracted successfully");
-
-        const latest = await getTenderListAPI();
-
-        // update last added tender to Draft
-        const updated = latest.map((t, i) =>
-          i === 0 ? { ...t, status: "Draft" } : t
-        );
-
-        localStorage.setItem("tenders_db", JSON.stringify(updated));
-        setTenders(updated);
-
-      }, 4000);
-
     } catch (err) {
-      console.error(err);
-      showNotification("Upload failed");
+      console.error("Upload error: ", err);
+      const errorMsg = err.response?.data?.detail?.[0]?.msg || "Upload failed";
+      showNotification(errorMsg);
     }
   };
 

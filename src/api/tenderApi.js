@@ -16,24 +16,21 @@ export const getTenderListAPI = async () => {
 
 // 🔹 ADD
 export const addTenderAPI = async (file) => {
-  const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  const formData = new FormData();
+  formData.append('file', file);
 
-  const newTender = {
-    id: Date.now(),
-    number: Math.floor(Math.random() * 10000),
-    name: file.name,
-    dueDate: "10 Mar 2026",
-    validityEnd: "12 Jun 2026",
-    tat: "5 Days",
-    validity: "7 Days",
-    status: "Draft",
-    date: "2026-03-10",
-  };
-
-  const updated = [newTender, ...tenders];
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-
-  return newTender;
+  try {
+    const response = await axios.post(`${BASE_URL}/tender/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Add Tender API Error: ", error);
+    throw error;
+  }
 };
 
 // 🔹 GET ONE
