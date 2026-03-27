@@ -50,16 +50,14 @@ export const getTenderDetailsAPI = async (id) => {
 };
 
 // 🔹 UPDATE (SAVE DRAFT)
-export const updateTenderAPI = async (data) => {
-  const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-  const updated = tenders.map((t) =>
-    t.id === data.id ? { ...t, ...data } : t
-  );
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-
-  return data;
+export const updateTenderAPI = async (tenderId, payload) => {
+  try{
+    const response = await axios.put(`${BASE_URL}/tender/${tenderId}`, payload);
+    return response.data;
+  } catch (error) {
+    console.error("API Error: ", error);
+    throw error;
+  }
 };
 
 // 🔹 UPLOAD CBA (SIMULATION)

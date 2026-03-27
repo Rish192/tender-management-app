@@ -78,9 +78,17 @@ const EditTenderModal = () => {
 
           const formatDateForInput = (dateStr) => {
             if (!dateStr) return "";
-            const [date] = dateStr.split(" ");
-            const [day, month, year] = date.split("-");
-            return `${year}-${month}-${day}`;
+
+            const cleanDate = dateStr.split(" ")[0];
+            if (cleanDate.includes("-") && cleanDate.split("-")[0].length === 4) {
+              return cleanDate;
+            }
+            const parts = cleanDate.split("-");
+            if (parts.length === 3) {
+              const [day, month, year] = parts;
+              return `${year}-${month}-${day}`;
+            }
+            return cleanDate;
           }
           setFormData({
             tender_number: details.tender_number || "",
@@ -134,23 +142,27 @@ const EditTenderModal = () => {
 
   try {
     const payload = {
-      id: tenderId,
-      industries: rows,
-      parameters: params,
-      status: "Draft",
+      tender_status: "Draft",
+      tender_details: {
+        ...formData,
+        domain: rows.map((r) => ({
+          industry: r.industry,
+          sector: r.s1,
+        })),
+      },
     };
 
-    const res = await updateTenderAPI(payload);
+    const res = await updateTenderAPI(tenderId, payload);
 
-    if (!res) throw new Error();
-          // 🔥 update UI also
+    if (!res) throw new Error("Update failed");
+
       updateTender(tenderId, payload);
 
-    showNotification("Tender Status Updated");
+    showNotification("Draft saved successfully");
     setEditOpen(false);
   } catch (err) {
     console.error("SAVE ERROR:", err);
-    showNotification("Save failed");
+    showNotification("Failed to save draft");
   }
 };
 
