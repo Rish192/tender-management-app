@@ -7,6 +7,7 @@ import TenderSummary from "../components/dashboard/TenderSummary";
 import TenderTable from "../components/dashboard/TenderTable";
 import SearchFilterModal from "../components/modals/SearchFilterModal";
 import UploadTenderModal from "../components/modals/UploadTenderModal";
+import UploadCbaModal from "../components/modals/UploadCbaModal";
 import ChatbotWidget from "../components/common/ChatbotWidget";
 import EditTenderModal from "../components/modals/EditTenderModal";
 import NotificationToast from "../components/common/NotificationToast";
@@ -143,6 +144,7 @@ const Dashboard = () => {
         <SearchFilterModal />
         <UploadTenderModal />
         <EditTenderModal />
+        <UploadCbaModal />
         <NotificationToast />
         <ChatbotWidget />
       </Box>

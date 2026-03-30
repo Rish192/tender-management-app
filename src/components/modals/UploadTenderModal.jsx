@@ -28,6 +28,7 @@ const UploadTenderModal = () => {
   };
 
   const handleUpload = async () => {
+    console.log("Upload clicked");
     if (!file) {
       showNotification("Please select a file");
       return;

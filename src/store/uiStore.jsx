@@ -37,11 +37,21 @@ export const UIProvider = ({ children }) => {
   const refreshPanelNotifications = useCallback(async () => {
     const data = await getNotificationsAPI();
     if (Array.isArray(data)) {
+      data.forEach(newNotif => {
+        const isNew = !panelNotifications.some(old => old.notification_id === newNotif.notification_id);
+
+        if (isNew && newNotif.status === "UNREAD") {
+          if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
+            showNotification("Document extracted successfully");
+          }
+        }
+      });
+
       setPanelNotifications(data);
       const unread = data.filter(n => n.status !== "READ").length;
       setNotificationCount(unread);
     }
-  }, []);
+  }, [panelNotifications, showNotification]);
 
   const markAllAsRead = async () => {
     const unreadIds = panelNotifications

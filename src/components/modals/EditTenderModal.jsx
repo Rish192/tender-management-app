@@ -40,7 +40,8 @@ const EditTenderModal = () => {
     editOpen,
     setEditOpen,
     showNotification,
-    selectedTenderId, // 👈 must exist in UI store
+    selectedTenderId,
+    setCbaUploadOpen
   } = useUI();
 
   const { updateTender } = useTenderStore();
@@ -385,12 +386,13 @@ const EditTenderModal = () => {
           <Box display="flex" justifyContent="space-between" mt={2}>
             <Box>
               <Button
-                component="label"
+                onClick={() => setCbaUploadOpen(true)}
+                // component="label"
                 startIcon={<UploadFileIcon />}
                 sx={{ background: "#2F4DB5", color: "#fff" }}
               >
                 Select Folder or Zip File
-                <input hidden type="file" onChange={handleZip} />
+                {/* <input hidden type="file" onChange={handleZip} /> */}
               </Button>
 
               {zipFile && <Typography mt={1}>{zipFile.name}</Typography>}

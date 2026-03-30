@@ -80,16 +80,31 @@ export const markNotificationAsReadAPI = async (notification_id) => {
 };
 
 // 🔹 UPLOAD CBA (SIMULATION)
-export const uploadCBAAPI = async (id, file) => {
-  const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+export const uploadCBAAPI = async (tenderId, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
 
-  const updated = tenders.map((t) =>
-    t.id === id ? { ...t, cbaUploaded: true } : t
-  );
+  try {
+    const response = await axios.post(`${BASE_URL}/tender/${tenderId}/cba/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("CBA Upload API Error: ", error);
+    throw error;
+  }
+  // const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  // const updated = tenders.map((t) =>
+  //   t.id === id ? { ...t, cbaUploaded: true } : t
+  // );
 
-  return true;
+  // localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+  // return true;
 };
 
 // 🔹 SEND FOR CHECKING (SIMULATE PROCESSING → READY)
