@@ -35,7 +35,12 @@ const Dashboard = () => {
     };
 
     loadTenders();
-  }, []);
+
+    const interval = setInterval(() => {
+      loadTenders();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [setTenders]);
 
   return (
     <Box display="flex" height="100vh" overflow="hidden">

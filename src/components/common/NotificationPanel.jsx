@@ -66,14 +66,20 @@ const NotificationPanel = ({
             pr: 1,
           }}
         >
-          {notifications.map((n, i) => (
-            <NotificationItem
-              key={i}
-              data={n}
-              onView={() => onView(n)}
-              onClose={() => onCloseItem(n)}
-            />
-          ))}
+          {Array.isArray(notifications) && notifications.length > 0 ? (
+            notifications.map((n, i) => (
+              <NotificationItem
+                key={n.notification_id}
+                data={n}
+                onView={() => onView(n)}
+                onClose={() => onCloseItem(n)}
+              />
+            ))
+          ) : (
+            <Typography textAlign="center" color="gray" mt={4}>
+              No notifications found.
+            </Typography>
+          )}
         </Box>
       </Box>
     </Modal>

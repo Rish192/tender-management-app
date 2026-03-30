@@ -57,6 +57,18 @@ export const updateTenderAPI = async (tenderId, payload) => {
   }
 };
 
+export const getNotificationsAPI = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/notifications`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching notifications:", err);
+    return [];
+  }
+};
+
 // 🔹 UPLOAD CBA (SIMULATION)
 export const uploadCBAAPI = async (id, file) => {
   const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
