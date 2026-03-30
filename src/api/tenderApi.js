@@ -69,6 +69,16 @@ export const getNotificationsAPI = async () => {
   }
 };
 
+export const markNotificationAsReadAPI = async (notification_id) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/notification/${notification_id}/read`);
+    return response.data;
+  } catch (err) {
+    console.error("Error marking notification as read:", err);
+    throw err;
+  }
+};
+
 // 🔹 UPLOAD CBA (SIMULATION)
 export const uploadCBAAPI = async (id, file) => {
   const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];

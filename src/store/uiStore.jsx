@@ -1,7 +1,7 @@
 // src/store/uiStore.jsx
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { getNotificationsAPI } from "../api/tenderApi";
+import { getNotificationsAPI, markNotificationAsReadAPI } from "../api/tenderApi";
 import NotificationPanel from './../components/common/NotificationPanel';
 
 const UIContext = createContext();
@@ -29,8 +29,6 @@ export const UIProvider = ({ children }) => {
   // ✅ GLOBAL NOTIFICATION (TOP RIGHT TOAST)
   const showNotification = (message) => {
     setNotification(message);
-    // setNotificationCount((prev) => prev + 1);
-
     setTimeout(() => {
       setNotification(null);
     }, 3000);
@@ -44,6 +42,27 @@ export const UIProvider = ({ children }) => {
       setNotificationCount(unread);
     }
   }, []);
+
+  const markAllAsRead = async () => {
+    const unreadIds = panelNotifications
+      .filter((n) => n.status !== "READ")
+      .map((n) => n.notification_id);
+
+    if (unreadIds.length === 0) return;
+
+    try {
+      await Promise.all(unreadIds.map((id) => markNotificationAsReadAPI(id)));
+      await refreshPanelNotifications();
+    } catch (err) {
+      console.error("Failed to mark notifications as read: ", err);
+    }
+  };
+
+  useEffect(() => {
+    if (notificationPanelOpen) {
+      markAllAsRead();
+    }
+  }, [notificationPanelOpen]);
 
   useEffect(() => {
     refreshPanelNotifications();
