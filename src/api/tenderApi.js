@@ -96,15 +96,18 @@ export const uploadCBAAPI = async (tenderId, file) => {
     console.error("CBA Upload API Error: ", error);
     throw error;
   }
-  // const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+};
 
-  // const updated = tenders.map((t) =>
-  //   t.id === id ? { ...t, cbaUploaded: true } : t
-  // );
-
-  // localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-
-  // return true;
+export const getTenderCBAAPI = async (tenderId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tender/${tenderId}/cba`, {
+      headers: {'Accept': 'application/json'}
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Fetch CBA API Error: ", error);
+    return [];
+  }
 };
 
 // 🔹 SEND FOR CHECKING (SIMULATE PROCESSING → READY)

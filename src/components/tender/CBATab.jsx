@@ -12,17 +12,38 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import PDFPreview from "../common/PDFPreview";
+import { getTenderCBAAPI } from "../../api/tenderApi";
 
 const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name 4", "Bidder Name 5", "Bidder Name 6"];
 
 const CBATab = () => {
+  const { id } = useParams();
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [bidders, setBidders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCbaData = async () => {
+      setLoading(true);
+      const data = await getTenderCBAAPI(id);
+      if (Array.isArray(data)) {
+        setBidders(data.map(item => item.vendor_name || "Unknown"));
+      }
+      setLoading(false);
+    };
+
+    if (id) fetchCbaData();
+  }, [id]);
 
   const openPreview = () => {
     setPreviewOpen(true);
   };
+
+  if (loading) return <Typography p={3}>Loading CBA Data...</Typography>
+  if (bidders.length === 0) return <Typography p={3}>No Bidders found for this tender.</Typography>
 
   return (
     <Box mt={3}>
@@ -88,46 +109,51 @@ const CBATab = () => {
             px: 2,
             py: 1.5,
             fontSize: 13,
+            position: 'sticky',
+            top: 0,
+            zIndex: 1
           }}
         >
           <Box flex={2}>Bidder Details</Box>
-          {bidders.map((b, i) => (
+          {bidders.map((name, i) => (
             <Box key={i} flex={1}>
-              {b}
+              {name}
             </Box>
           ))}
         </Box>
 
         {/* BODY */}
-        {rows.map((row, i) => (
-          <Box
-            key={i}
-            display="flex"
-            sx={{
-              background: i % 2 === 0 ? "#f8fafc" : "#ffffff",
-              borderBottom: "1px solid #e5e7eb",
-            }}
-          >
-            <Box flex={2} p={2} fontWeight={500}>
-              {row.label}
-            </Box>
-
-            {row.values.map((v, j) => (
-              <Box
-                key={j}
-                flex={1}
-                p={2}
-                sx={{
-                  cursor: "pointer",
-                  "&:hover": { background: "#eef2ff" },
-                }}
-                onClick={openPreview}
-              >
-                {v}
+        <Box sx={{maxHeight: "400px", overflowY: 'auto'}}>
+          {rows.map((row, i) => (
+            <Box
+              key={i}
+              display="flex"
+              sx={{
+                background: i % 2 === 0 ? "#f8fafc" : "#ffffff",
+                borderBottom: "1px solid #e5e7eb",
+              }}
+            >
+              <Box flex={2} p={2} fontWeight={500}>
+                {row.label}
               </Box>
-            ))}
-          </Box>
-        ))}
+
+              {row.values.map((v, j) => (
+                <Box
+                  key={j}
+                  flex={1}
+                  p={2}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": { background: "#eef2ff" },
+                  }}
+                  onClick={openPreview}
+                >
+                  {v}
+                </Box>
+              ))}
+            </Box>
+          ))}
+        </Box>
 
         {/* DOCUMENT CHECKLIST */}
         <Box display="flex" sx={{ background: "#f1f5f9" }}>
@@ -199,7 +225,7 @@ export default CBATab;
 
 const rows = [
   {
-    label: "Company Status",
+    label: "Status of Firm",
     values: [
       "Partnership Firm",
       "Partnership Firm",
@@ -210,23 +236,95 @@ const rows = [
     ],
   },
   {
-    label: "Startup Certificate Submitted By The Bidder",
+    label: "Proprietor Director",
     values: Array(6).fill("Tender Specific"),
   },
   {
-    label: "Domain Industry",
+    label: "Power of Attorney",
     values: Array(6).fill("Tender Specific"),
   },
   {
-    label: "Self Certification By Bidder",
+    label: "Registered Office Address",
     values: Array(6).fill("Applicable based on tender estimate value"),
   },
   {
-    label: "Certificate By Statutory Auditor",
+    label: "Contact Address",
     values: Array(6).fill("Applicable based on tender estimate value"),
   },
   {
-    label: "Required EMD For Quoted Items",
+    label: "Service Rendered Address",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Email",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Phone",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Company PAN",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "GST",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "EMD Amount",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Terms and Conditions",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Bid Validity",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Payment Terms",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Contract Performance Security",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Contract Period",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Price Reduction Schedule",
+    values: Array(6).fill(
+      "Applicable based on tender estimate value / Tender Specific"
+    ),
+  },
+  {
+    label: "Liable To Raise E-Invoice",
     values: Array(6).fill(
       "Applicable based on tender estimate value / Tender Specific"
     ),
