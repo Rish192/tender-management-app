@@ -21,11 +21,13 @@ const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name
 
 const CBACell = ({tenderId, bidId, property, openPreview}) => {
   const [value, setValue] = useState("Loading...");
+  const [cellData, setCellData] = useState(null);
 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
         const res = await getTenderCBADetailAPI(tenderId, bidId, property);
+        setCellData(res);
 
         if (res && res.property_value !== null && res.property_value !== undefined) {
           const val = res.property_value;
@@ -49,7 +51,11 @@ const CBACell = ({tenderId, bidId, property, openPreview}) => {
   return (
     <Box
       flex={1} p={2}
-      onClick={() => openPreview(tenderId, bidId, property)}
+      onClick={() => {
+        if (cellData?.file_path) {
+          openPreview(cellData.file_path, cellData.page_number || 1, cellData.doc_name);
+        }
+      }}
       sx={{"&:hover": {background: "#ee2ff"}, cursor: "pointer"}}  
     >
       {value}
@@ -62,6 +68,11 @@ const CBATab = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [previewData, setPreviewData] = useState({
+    url: "",
+    page: 1,
+    filename: ""
+  });
 
   useEffect(() => {
     const fetchCbaData = async () => {
@@ -79,7 +90,8 @@ const CBATab = () => {
     if (id) fetchCbaData();
   }, [id]);
 
-  const openPreview = () => {
+  const openPreview = (url, page, fileName) => {
+    setPreviewData({ url, page, fileName });
     setPreviewOpen(true);
   };
 
@@ -249,7 +261,7 @@ const CBATab = () => {
       </Box>
 
       {/* PDF PREVIEW */}
-      <PDFPreview open={previewOpen} onClose={() => setPreviewOpen(false)} />
+      <PDFPreview open={previewOpen} onClose={() => setPreviewOpen(false)} data={previewData}/>
     </Box>
   );
 };
