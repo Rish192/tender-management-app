@@ -110,6 +110,25 @@ export const getTenderCBAAPI = async (tenderId) => {
   }
 };
 
+export const getTenderCBADetailAPI = async (tenderId, bidId, property) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tender/${tenderId}/cba/detail`, {
+      params: {
+        bid_id: bidId,
+        cba_property: property,
+      },
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    return response.data;
+  } catch (err) {
+    console.error(`Error fetching CBA detail for ${property}:`, err);
+    return null;
+  }
+};
+
 // 🔹 SEND FOR CHECKING (SIMULATE PROCESSING → READY)
 export const sendForCheckingAPI = async (id) => {
   const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];

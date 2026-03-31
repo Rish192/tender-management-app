@@ -9,6 +9,7 @@ const UIContext = createContext();
 export const UIProvider = ({ children }) => {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [cbaUploadOpen, setCbaUploadOpen] = useState(false);
   const [notification, setNotification] = useState(null);
   const [notificationCount, setNotificationCount] = useState(0);
   const [notificationPanelOpen, setNotificationPanelOpen] = useState(false);
@@ -108,7 +109,10 @@ export const UIProvider = ({ children }) => {
         notificationPanelOpen,
         setNotificationPanelOpen,
         panelNotifications,
-        refreshPanelNotifications
+        refreshPanelNotifications,
+
+        cbaUploadOpen,
+        setCbaUploadOpen,
       }}
     >
       {children}

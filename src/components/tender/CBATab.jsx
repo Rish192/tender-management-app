@@ -15,9 +15,47 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PDFPreview from "../common/PDFPreview";
-import { getTenderCBAAPI } from "../../api/tenderApi";
+import { getTenderCBAAPI, getTenderCBADetailAPI } from "../../api/tenderApi";
 
 const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name 4", "Bidder Name 5", "Bidder Name 6"];
+
+const CBACell = ({tenderId, bidId, property, openPreview}) => {
+  const [value, setValue] = useState("Loading...");
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      try {
+        const res = await getTenderCBADetailAPI(tenderId, bidId, property);
+
+        if (res && res.property_value !== null && res.property_value !== undefined) {
+          const val = res.property_value;
+          if (Array.isArray(val)) {
+            setValue(val.length > 0 ? val.join(",") : "N/A");
+          } else if (typeof val === "boolean") {
+            setValue(val ? "True" : "False");
+          } else {
+            setValue(val.toString());
+          }
+        } else {
+          setValue("N/A")
+        }
+      } catch {
+        setValue("Error");
+      }
+    };
+    fetchDetail();
+  }, [tenderId, bidId, property]);
+
+  return (
+    <Box
+      flex={1} p={2}
+      onClick={() => openPreview(tenderId, bidId, property)}
+      sx={{"&:hover": {background: "#ee2ff"}, cursor: "pointer"}}  
+    >
+      {value}
+    </Box>
+  );
+};
 
 const CBATab = () => {
   const { id } = useParams();
@@ -30,7 +68,10 @@ const CBATab = () => {
       setLoading(true);
       const data = await getTenderCBAAPI(id);
       if (Array.isArray(data)) {
-        setBidders(data.map(item => item.vendor_name || "Unknown"));
+        setBidders(data.map(item => ({
+          bidderName: item.vendor_name || "Unknown",
+          bidId: item.bid_id
+        })));
       }
       setLoading(false);
     };
@@ -42,8 +83,8 @@ const CBATab = () => {
     setPreviewOpen(true);
   };
 
-  if (loading) return <Typography p={3}>Loading CBA Data...</Typography>
-  if (bidders.length === 0) return <Typography p={3}>No Bidders found for this tender.</Typography>
+  //if (loading) return <Typography p={3}>Loading CBA Data...</Typography>
+  //if (bidders.length === 0) return <Typography p={3}>No Bidders found for this tender.</Typography>
 
   return (
     <Box mt={3}>
@@ -115,15 +156,15 @@ const CBATab = () => {
           }}
         >
           <Box flex={2}>Bidder Details</Box>
-          {bidders.map((name, i) => (
-            <Box key={i} flex={1}>
-              {name}
+          {bidders.map((bidder) => (
+            <Box key={bidder.bidId} flex={1}>
+              {bidder.bidderName}
             </Box>
           ))}
         </Box>
 
         {/* BODY */}
-        <Box sx={{maxHeight: "400px", overflowY: 'auto'}}>
+        <Box sx={{maxHeight: "1000px", overflowY: 'auto'}}>
           {rows.map((row, i) => (
             <Box
               key={i}
@@ -137,19 +178,14 @@ const CBATab = () => {
                 {row.label}
               </Box>
 
-              {row.values.map((v, j) => (
-                <Box
-                  key={j}
-                  flex={1}
-                  p={2}
-                  sx={{
-                    cursor: "pointer",
-                    "&:hover": { background: "#eef2ff" },
-                  }}
-                  onClick={openPreview}
-                >
-                  {v}
-                </Box>
+              {bidders.map((bidder) => (
+                <CBACell
+                  key={bidder.bidId}
+                  tenderId={id}
+                  bidId={bidder.bidId}
+                  property={row.apiKey}
+                  openPreview={openPreview}
+                />
               ))}
             </Box>
           ))}
@@ -226,107 +262,74 @@ export default CBATab;
 const rows = [
   {
     label: "Status of Firm",
-    values: [
-      "Partnership Firm",
-      "Partnership Firm",
-      "Proprietorship Firm",
-      "Private Company",
-      "Proprietorship Firm",
-      "Proprietorship Firm",
-    ],
+    apiKey: "status_of_firm",
   },
   {
     label: "Proprietor Director",
-    values: Array(6).fill("Tender Specific"),
+    apiKey: "proprietor_director",
   },
   {
     label: "Power of Attorney",
-    values: Array(6).fill("Tender Specific"),
+    apiKey: "power_of_attorney",
   },
   {
     label: "Registered Office Address",
-    values: Array(6).fill("Applicable based on tender estimate value"),
+    apiKey: "registered_office_address",
   },
   {
     label: "Contact Address",
-    values: Array(6).fill("Applicable based on tender estimate value"),
+    apiKey: "contact_address",
   },
   {
     label: "Service Rendered Address",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "service_rendered_address",
   },
   {
     label: "Email",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "email",
   },
   {
     label: "Phone",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "phone",
   },
   {
     label: "Company PAN",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "company_pan",
   },
   {
     label: "GST",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "gst",
   },
   {
     label: "EMD Amount",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "emd_amount",
   },
   {
     label: "Terms and Conditions",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "terms_and_condition",
   },
   {
     label: "Bid Validity",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "bid_validity",
   },
   {
     label: "Payment Terms",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "payment_terms",
   },
   {
     label: "Contract Performance Security",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "contract_performance_security",
   },
   {
     label: "Contract Period",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "contract_period",
   },
   {
     label: "Price Reduction Schedule",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "price_reduction_schedule",
   },
   {
     label: "Liable To Raise E-Invoice",
-    values: Array(6).fill(
-      "Applicable based on tender estimate value / Tender Specific"
-    ),
+    apiKey: "liable_to_raise_e_invoice",
   },
 ];

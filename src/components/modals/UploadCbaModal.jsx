@@ -7,6 +7,7 @@ import { uploadCBAAPI } from "../../api/tenderApi";
 const UploadCbaModal = () => {
     const {cbaUploadOpen, setCbaUploadOpen, showNotification, selectedTenderId} = useUI();
     const [file, setFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -22,17 +23,24 @@ const UploadCbaModal = () => {
             showNotification("Please select a folder or zip file");
             return;
         }
-
+        setUploading(true);
+        console.log("Upload clicked");
         try {
             const res = await uploadCBAAPI(selectedTenderId, file);
             if (res.status === "success" || res) {
+                console.log("Uploaded successfully");
                 showNotification("CBA upload successful");
+            }
+            else {
+                console.log("Not uploaded");
             }
             setCbaUploadOpen(false);
             setFile(null);
         } catch (err) {
             console.error("CBA Upload error: ", err);
             showNotification("CBA upload failed");
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -70,7 +78,7 @@ const UploadCbaModal = () => {
 
                 <Box display="flex" justifyContent="flex-end" mt={3}>
                     <Button onClick={handleUpload} variant="contained" sx={{ background: "#2563eb", textTransform: "none", px: 3, borderRadius: 2 }}>
-                        Upload
+                        {uploading ? "Uploading..." : "Upload"}
                     </Button>
                 </Box>
             </Box>

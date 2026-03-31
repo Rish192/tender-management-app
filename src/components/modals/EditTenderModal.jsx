@@ -14,6 +14,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { useState, useEffect } from "react";
 import { useUI } from "../../store/uiStore";
 import { useTenderStore } from "../../store/tenderStore";
+import { useNavigate } from "react-router-dom";
 
 // 🔥 API IMPORTS
 import {
@@ -41,11 +42,14 @@ const EditTenderModal = () => {
     setEditOpen,
     showNotification,
     selectedTenderId,
-    setCbaUploadOpen
+    setCbaUploadOpen,
+    panelNotifications,
   } = useUI();
 
   const { updateTender } = useTenderStore();
+  const navigate = useNavigate();
 
+  const [isCbaReady, setIsCbaReady] = useState(false);
   const [tenderId, setTenderId] = useState(null);
   const [zipFile, setZipFile] = useState(null);
 
@@ -115,6 +119,19 @@ const EditTenderModal = () => {
     fetchDetails();
   }, [editOpen, selectedTenderId]);
 
+  useEffect(() => {
+    if (!selectedTenderId) return;
+
+    const cbaProcessed = panelNotifications.some(n => 
+      n.message.includes("CBA Analysis available") &&
+      n.message.includes(selectedTenderId)
+    );
+
+    if (cbaProcessed) {
+      setIsCbaReady(true);
+    }
+  }, [panelNotifications, selectedTenderId])
+
   // ================= HANDLERS =================
   const handleChange = (field) => (e) => {
     setFormData({ ...formData, [field]: e.target.value });
@@ -157,7 +174,7 @@ const EditTenderModal = () => {
 
     if (!res) throw new Error("Update failed");
 
-      updateTender(tenderId, payload);
+    updateTender(tenderId, payload);
 
     showNotification("Draft saved successfully");
     setEditOpen(false);
@@ -174,29 +191,26 @@ const EditTenderModal = () => {
       return;
     }
 
-    if (!zipFile) {
-      showNotification("Upload ZIP file");
-      return;
-    }
-
     try {
-      // ✅ simulate upload
-      await uploadCBAAPI(tenderId, zipFile);
-
-      // ✅ directly mark READY (no backend flow)
       const payload = {
-        id: tenderId,
-        status: "Ready",
+        tender_details: {
+          ...formData,
+          domain: rows.map((r) => ({
+            industry: r.industry,
+            sector: r.s1,
+          })),
+        },
       };
 
-      await updateTenderAPI(payload);
+      const res = await updateTenderAPI(tenderId, payload);
 
-      // 🔥 update UI instantly
-      updateTender(tenderId, payload);
+      if (res) {
+        updateTender(tenderId, payload);
+        showNotification("Tender validated successfully");
 
-      showNotification("Tender validated successfully");
-
-      setEditOpen(false);
+        setEditOpen(false);
+        navigate(`/tender/${tenderId}`);
+      }
     } catch (err) {
       console.error("SUBMIT ERROR:", err);
       showNotification("Submission failed");
@@ -401,7 +415,10 @@ const EditTenderModal = () => {
             <Box display="flex" gap={2}>
               <Button>Reset</Button>
               <Button onClick={handleSaveDraft}>Save Draft</Button>
-              <Button variant="contained" onClick={handleSubmit} sx={{ background: "#2F4DB5" }}>
+              <Button variant="contained" onClick={handleSubmit} disabled={!isCbaReady} 
+                sx={{ background: isCbaReady ? "#2F4DB5" : "#cccccc",
+                      "&:disabled": {background: "#cccccc", color: "#666"}
+                 }}>
                 Validate and Save Tender
               </Button>
             </Box>
