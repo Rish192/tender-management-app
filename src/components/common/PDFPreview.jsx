@@ -76,15 +76,6 @@ const PDFPreview = ({ open, onClose, data }) => {
           <Typography color="#fff">Failed to load preview</Typography>
         )}
       </Box>
-      {/* <Box flex={1} px={2} bgcolor="#525659">
-        {pdfUrl ? (
-          <iframe src={pdfUrl} width="100%" height="100%" />
-        ) : (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-            <Typography color="#fff">No document path available</Typography>
-          </Box>
-        )}
-      </Box> */}
 
       {/* FOOTER */}
       <Box p={2}>
@@ -97,7 +88,7 @@ const PDFPreview = ({ open, onClose, data }) => {
             borderRadius: 2,
           }}
         >
-          RFP.pdf
+          {`${data.fileName}`}
         </Box>
       </Box>
     </Box>

@@ -1,5 +1,6 @@
-import { Modal, Box, Typography, Button } from "@mui/material";
+import { Modal, Box, IconButton, Typography, Button, CircularProgress } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import { useUI } from "../../store/uiStore";
 import { uploadCBAAPI } from "../../api/tenderApi";
@@ -7,11 +8,30 @@ import { uploadCBAAPI } from "../../api/tenderApi";
 const UploadCbaModal = () => {
     const {cbaUploadOpen, setCbaUploadOpen, showNotification, selectedTenderId} = useUI();
     const [file, setFile] = useState(null);
+    const [dragActive, setDragActive] = useState(false);
     const [uploading, setUploading] = useState(false);
+
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
 
     const handleDrop = (e) => {
         e.preventDefault();
-        setFile(e.dataTransfer.files[0]);
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            const droppedFile = e.dataTransfer.files[0];
+            setFile(droppedFile);
+        }
+        else {
+            showNotification("Only PDF files are supported");
+        }
     };
 
     const handleBrowse = (e) => {
@@ -24,14 +44,12 @@ const UploadCbaModal = () => {
             return;
         }
         setUploading(true);
-        console.log("Upload clicked");
         try {
             const res = await uploadCBAAPI(selectedTenderId, file);
             if (res.status === "success" || res) {
                 console.log("Uploaded successfully");
                 showNotification("CBA upload successful");
-            }
-            else {
+            } else {
                 console.log("Not uploaded");
             }
             setCbaUploadOpen(false);
@@ -45,7 +63,12 @@ const UploadCbaModal = () => {
     };
 
     return (
-        <Modal open={cbaUploadOpen} onClose={() => setCbaUploadOpen(false)}>
+        <Modal open={cbaUploadOpen} onClose={() => {
+            if (!uploading) {
+                setCbaUploadOpen(false);
+                setFile(null);
+            }
+        }}>
             <Box sx={{
                 width: 480,
                 background: "#f5f7fb",
@@ -53,32 +76,70 @@ const UploadCbaModal = () => {
                 borderRadius: 3,
                 margin: "120px auto",
                 boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+                position: "relative",
             }}>
+                {uploading && (
+                    <Box sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        background: "rgba(245, 247, 251, 0.7)",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 10,
+                        backdropFilter: "blur(2px)"
+                    }}>
+                        <CircularProgress size={50} sx={{ color: "#2563eb" }} />
+                        <Typography mt={2} fontWeight={500} color="#2563eb">
+                            Uploading Bids...
+                        </Typography>
+                    </Box>
+                )}
+
                 <Typography fontWeight={600} mb={2}>Bulk Upload Bids (CBA)</Typography>
 
-                <Box onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}
+                <Box 
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
                     sx={{
-                        border: "2px dashed #3b82f6",
+                        border: dragActive ? "2px solid #2563eb" : "2px dashed #3b82f6",
                         borderRadius: 2,
                         height: 160,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
-                        background: "#eef2ff",
+                        background: dragActive ? "#dbeafe" : "#eef2ff",
+                        textAlign: "center",
+                        transition: "all 0.2s ease-in-out",
                     }}>
-                        <CloudUploadIcon sx={{ fontSize: 32, color: "#3b82f6" }} />
+                        <CloudUploadIcon sx={{ fontSize: 32, color: "#3b82f6", transform: dragActive ? "scale(1.1)" : "scale(1)", transition: "transform 0.2s" }} />
                         <Typography fontSize={13} mt={1} color="#6b7280">
                             Drag & Drop ZIP or <label htmlFor="cbaUpload" style={{ color: "#2563eb", cursor: "pointer", fontWeight: 500 }}>Browse</label>
                         </Typography>
                         <input id="cbaUpload" type="file" onChange={handleBrowse} style={{ display: "none" }} />
                 </Box>
 
-                {file && <Typography mt={1} fontSize={12}>Selected: {file.name}</Typography>}
+                {file && (
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: '1vh'}}>
+                        <Typography fontSize={12}>
+                            Selected: {file.name}
+                        </Typography>
+                        <IconButton onClick={() => setFile(null)} sx={{ color: "#ef4444" }}>
+                            <DeleteIcon sx={{fontSize: '1vw',}}/>
+                        </IconButton>
+                    </Box>
+                )}
 
                 <Box display="flex" justifyContent="flex-end" mt={3}>
                     <Button onClick={handleUpload} variant="contained" sx={{ background: "#2563eb", textTransform: "none", px: 3, borderRadius: 2 }}>
-                        {uploading ? "Uploading..." : "Upload"}
+                        Upload
                     </Button>
                 </Box>
             </Box>

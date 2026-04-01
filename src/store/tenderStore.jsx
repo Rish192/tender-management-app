@@ -27,7 +27,7 @@ export const TenderProvider = ({ children }) => {
   const updateTender = (id, updatedData) => {
     setTendersState((prev) =>
       prev.map((t) =>
-        t.id === id ? { ...t, ...updatedData } : t
+        (t.tender_id === id || t.id === id) ? { ...t, ...updatedData } : t
       )
     );
   };

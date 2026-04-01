@@ -3,8 +3,11 @@ import {
   Box,
   Typography,
   Button,
+  IconButton,
+  CircularProgress
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import { useUI } from "../../store/uiStore";
 import { useTenderStore } from "../../store/tenderStore";
@@ -15,11 +18,32 @@ const UploadTenderModal = () => {
   const { setTenders } = useTenderStore(); // ✅ IMPORTANT
 
   const [file, setFile] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer.files[0];
-    setFile(droppedFile);
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const droppedFile = e.dataTransfer.files[0];
+      if (droppedFile.type === "application/pdf") {
+        setFile(droppedFile);
+      }
+      else {
+        showNotification("Only PDF files are supported");
+      }
+    }
   };
 
   const handleBrowse = (e) => {
@@ -33,12 +57,14 @@ const UploadTenderModal = () => {
       showNotification("Please select a file");
       return;
     }
-
+    setUploading(true);
     try {
       const res = await addTenderAPI(file);
 
       if (res.status === "success") {
         showNotification("Document upload queue initiated successfully");
+      } else {
+        console.log("Upload failed");
       }
 
       const data = await getTenderListAPI();
@@ -51,11 +77,18 @@ const UploadTenderModal = () => {
       console.error("Upload error: ", err);
       const errorMsg = err.response?.data?.detail?.[0]?.msg || "Upload failed";
       showNotification(errorMsg);
+    } finally { 
+      setUploading(false);
     }
   };
 
   return (
-    <Modal open={uploadOpen} onClose={() => setUploadOpen(false)}>
+    <Modal open={uploadOpen} onClose={() => {
+      if (!uploading) {
+        setUploadOpen(false);
+        setFile(null);
+      }
+    }}>
       <Box
         sx={{
           width: 480,
@@ -64,28 +97,53 @@ const UploadTenderModal = () => {
           borderRadius: 3,
           margin: "120px auto",
           boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+          position: "relative",
         }}
       >
+        {uploading && (
+          <Box sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "rgba(245, 247, 251, 0.7)", // Semi-transparent matching bg
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10,
+              backdropFilter: "blur(2px)"
+          }}>
+              <CircularProgress size={50} sx={{ color: "#2563eb" }} />
+              <Typography mt={2} fontWeight={500} color="#2563eb">
+                Uploading Tender...
+              </Typography>
+          </Box>
+        )}
         <Typography fontWeight={600} mb={2}>
           Upload file
         </Typography>
 
         <Box
-          onDragOver={(e) => e.preventDefault()}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
           onDrop={handleDrop}
           sx={{
-            border: "2px dashed #3b82f6",
+            border: dragActive ? "2px solid #2563eb" : "2px dashed #3b82f6",
             borderRadius: 2,
             height: 160,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            background: "#eef2ff",
+            background: dragActive ? "#dbeafe" : "#eef2ff",
             textAlign: "center",
+            transition: "all 0.2s ease-in-out",
           }}
         >
-          <CloudUploadIcon sx={{ fontSize: 32, color: "#3b82f6" }} />
+          <CloudUploadIcon sx={{ fontSize: 32, color: "#3b82f6", transform: dragActive ? "scale(1.1)" : "scale(1)", transition: "transform 0.2s" }} />
 
           <Typography fontSize={13} mt={1} color="#6b7280">
             Drag & Drop your files or{" "}
@@ -104,15 +162,21 @@ const UploadTenderModal = () => {
           <input
             id="fileUpload"
             type="file"
+            accept=".pdf"
             onChange={handleBrowse}
             style={{ display: "none" }}
           />
         </Box>
 
         {file && (
-          <Typography mt={1} fontSize={12}>
+          <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: '1vh'}}>
+          <Typography fontSize={12}>
             Selected: {file.name}
           </Typography>
+          <IconButton onClick={() => setFile(null)} sx={{ color: "#ef4444" }}>
+            <DeleteIcon sx={{fontSize: '1vw',}}/>
+          </IconButton>
+          </Box>
         )}
 
         <Box display="flex" justifyContent="space-between" mt={2}>

@@ -3,15 +3,29 @@
 import { Box, Typography } from "@mui/material";
 import { PieChart, Pie, Cell } from "recharts";
 import { colors } from "../../styles/theme";
-
-const data = [
-  { name: "Issued", value: 100, color: "#6366F1" },
-  { name: "In Progress", value: 60, color: "#3B82F6" },
-  { name: "Completed", value: 50, color: "#14B8A6" },
-  { name: "Awarded", value: 35, color: "#0EA5A4" },
-];
+import { useTenderStore } from "../../store/tenderStore";
+import { useMemo } from "react";
 
 const TenderSummary = () => {
+  const { tenders } = useTenderStore();
+
+  const summaryData = useMemo(() => {
+    const list = Array.isArray(tenders) ? tenders : [];
+    const counts = {
+      DRAFT_SAVED: list.filter(t => t.tender_status === "DRAFT_SAVED").length,
+      SENT_FOR_CHECKING: list.filter(t => t.tender_status === "SENT_FOR_CHECKING").length,
+      BID_DONE: list.filter(t => t.tender_status === "BID_DONE").length,
+      RFP_DONE: list.filter(t => t.tender_status === "RFP_DONE").length,
+    };
+    return [
+      { name: "RFP Done", value: counts.RFP_DONE, color: "#0EA5E9", label: "RFP Completed" },
+      { name: "Drafts", value: counts.DRAFT_SAVED, color: "#6366F1", label: "Draft Saved" },
+      { name: "Bid Done", value: counts.BID_DONE, color: "#14B8A6", label: "Bid Evaluation Done" },
+      { name: "Checking", value: counts.SENT_FOR_CHECKING, color: "#3B82F6", label: "Sent for Checking" },
+    ];
+  }, [tenders]);
+
+  const totalTenders = tenders?.length || 0;
   return (
     <Box width={420}>
       {/* TITLE */}
@@ -25,13 +39,14 @@ const TenderSummary = () => {
         <Box position="relative">
           <PieChart width={180} height={180}>
             <Pie
-              data={data}
+              data={summaryData}
               innerRadius={60}
               outerRadius={80}
               dataKey="value"
               stroke="none"
+              isAnimationActive={true}
             >
-              {data.map((entry, index) => (
+              {summaryData.map((entry, index) => (
                 <Cell key={index} fill={entry.color} />
               ))}
             </Pie>
@@ -49,14 +64,14 @@ const TenderSummary = () => {
               TOTAL TENDERS
             </Typography>
             <Typography fontWeight={700} fontSize={18}>
-              245
+              {totalTenders}
             </Typography>
           </Box>
         </Box>
 
         {/* LEGEND */}
         <Box>
-          {data.map((item, i) => (
+          {summaryData.map((item, i) => (
             <Box key={i} display="flex" alignItems="center" gap={1} mb={1}>
               <Box
                 sx={{
@@ -67,13 +82,14 @@ const TenderSummary = () => {
                 }}
               />
               <Typography fontSize={13}>
-                {item.name === "Issued"
+                {item.value} - {item.label}
+                {/* {item.name === "Issued"
                   ? "Tenders Issued"
                   : item.name === "In Progress"
                   ? "Evaluation in Progress"
                   : item.name === "Completed"
                   ? "Evaluation Completed"
-                  : "Tender Awarded"}
+                  : "Tender Awarded"} */}
               </Typography>
             </Box>
           ))}

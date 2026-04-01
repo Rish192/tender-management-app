@@ -46,7 +46,7 @@ const EditTenderModal = () => {
     panelNotifications,
   } = useUI();
 
-  const { updateTender } = useTenderStore();
+  const { updateTender, tenders } = useTenderStore();
   const navigate = useNavigate();
 
   const [isCbaReady, setIsCbaReady] = useState(false);
@@ -68,7 +68,12 @@ const EditTenderModal = () => {
     total_emd: "",
     avg_annual_turnover: "",
     working_capital: "",
-    evaluation_methodology: ""
+    evaluation_methodology: "",
+    purchase_service_requisition_number: "",
+    bid_validity_end_date: "",
+    mse_policy: "",
+    make_in_india_policy: "",
+    net_worth: ""
   });
 
   // ================= INIT =================
@@ -105,6 +110,12 @@ const EditTenderModal = () => {
             avg_annual_turnover: details.avg_annual_turnover || "",
             working_capital: details.working_capital || "",
             evaluation_methodology: details.evaluation_methodology || "",
+            purchase_service_requisition_number: details.purchase_service_requisition_number || "",
+            bid_validity_end_date: formatDateForInput(details.bid_validity_end_date) || "",
+            mse_policy: details.mse_policy || "",
+            make_in_india_policy: details.make_in_india_policy || "",
+            net_worth: details.net_worth || ""
+
           });
           if (details.domain && details.domain.length > 0) {
             setRows(details.domain.map(d => ({
@@ -120,7 +131,9 @@ const EditTenderModal = () => {
   }, [editOpen, selectedTenderId]);
 
   useEffect(() => {
-    if (!selectedTenderId) return;
+    setIsCbaReady(false);
+
+    if (!selectedTenderId || !editOpen) return;
 
     const cbaProcessed = panelNotifications.some(n => 
       n.message.includes("CBA Analysis available") &&
@@ -130,7 +143,7 @@ const EditTenderModal = () => {
     if (cbaProcessed) {
       setIsCbaReady(true);
     }
-  }, [panelNotifications, selectedTenderId])
+  }, [panelNotifications, selectedTenderId, editOpen])
 
   // ================= HANDLERS =================
   const handleChange = (field) => (e) => {
@@ -160,7 +173,7 @@ const EditTenderModal = () => {
 
   try {
     const payload = {
-      tender_status: "Draft",
+      tender_status: "DRAFT_SAVED",
       tender_details: {
         ...formData,
         domain: rows.map((r) => ({
@@ -205,7 +218,13 @@ const EditTenderModal = () => {
       const res = await updateTenderAPI(tenderId, payload);
 
       if (res) {
-        updateTender(tenderId, payload);
+        const existingTender = tenders.find(t => t.tender_id === tenderId);
+        const updatedData = {
+          ...existingTender,
+          ...payload,
+          isValidated: true
+        }
+        updateTender(tenderId, updatedData);
         showNotification("Tender validated successfully");
 
         setEditOpen(false);
@@ -263,14 +282,14 @@ const EditTenderModal = () => {
           </Typography>
 
           <Box display="grid" gridTemplateColumns="repeat(4,1fr)" gap={2}>
-            <TextField label="Purchase / Service Requisition number(s)*" sx={inputStyle} />
+            <TextField label="Purchase / Service Requisition number(s)*" value={formData.purchase_service_requisition_number} onChange={handleChange("purchase_service_requisition_number")} sx={inputStyle} />
             <TextField label="Tender Number*" value={formData.tender_number} onChange={handleChange("tender_number")} sx={inputStyle} />
             <TextField label="Tender Subject*" value={formData.tender_subject} onChange={handleChange("tender_subject")} sx={inputStyle} />
             <TextField type="date" label="Tender Publishing Date*" InputLabelProps={{ shrink: true }} value={formData.tender_publishing_date} onChange={handleChange("tender_publishing_date")} sx={inputStyle} />
 
             <TextField type="date" label="Bid Due Date*" InputLabelProps={{ shrink: true }} value={formData.bid_due_date} onChange={handleChange("bid_due_date")} sx={inputStyle} />
             <TextField type="date" label="Bid Opening Date*" InputLabelProps={{ shrink: true }} value={formData.bid_opening_date} onChange={handleChange("bid_opening_date")} sx={inputStyle} />
-            <TextField type="date" label="Bid Validity End Date*" InputLabelProps={{ shrink: true }} sx={inputStyle} />
+            <TextField type="date" label="Bid Validity End Date*" InputLabelProps={{ shrink: true }} value={formData.bid_validity_end_date} onChange={handleChange("bid_validity_end_date")} sx={inputStyle} />
           </Box>
 
           {/* FINANCIAL */}
@@ -287,7 +306,7 @@ const EditTenderModal = () => {
               <Typography fontSize={13}>Financial Criteria (FBEC)</Typography>
 
               <Box display="flex" gap={2} mt={2}>
-                <TextField label="Net Worth (INR)" fullWidth sx={inputStyle} />
+                <TextField label="Net Worth (INR)" fullWidth value={formData.net_worth} onChange={handleChange("net_worth")} sx={inputStyle} />
                 <TextField label="Average Annual Turnover (INR)" value={formData.avg_annual_turnover} onChange={handleChange("avg_annual_turnover")} fullWidth sx={inputStyle} />
                 <TextField label="Working Capital (INR)" value={formData.working_capital} onChange={handleChange("working_capital")} fullWidth sx={inputStyle} />
               </Box>
@@ -300,14 +319,14 @@ const EditTenderModal = () => {
 
           {/* DROPDOWNS */}
           <Box display="grid" gridTemplateColumns="repeat(3,1fr)" gap={2} mt={3}>
-            <TextField select label="MSE Policy" sx={inputStyle}>
-              <MenuItem>Applicable</MenuItem>
-              <MenuItem>Not Applicable</MenuItem>
+            <TextField select label="MSE Policy" value={formData.mse_policy} onChange={handleChange("mse_policy")} sx={inputStyle}>
+              <MenuItem value="Applicable">Applicable</MenuItem>
+              <MenuItem value="Not Applicable">Not Applicable</MenuItem>
             </TextField>
 
-            <TextField select label="Make in India Policy" sx={inputStyle}>
-              <MenuItem>Applicable</MenuItem>
-              <MenuItem>Not Applicable</MenuItem>
+            <TextField select label="Make in India Policy" value={formData.make_in_india_policy} onChange={handleChange("make_in_india_policy")} sx={inputStyle}>
+              <MenuItem value="Applicable">Applicable</MenuItem>
+              <MenuItem value="Not Applicable">Not Applicable</MenuItem>
             </TextField>
 
             <TextField select label="Evaluation Methodology*" value={formData.evaluation_methodology} onChange={handleChange("evaluation_methodology")} sx={inputStyle}>

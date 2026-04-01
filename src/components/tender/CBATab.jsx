@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import PDFPreview from "../common/PDFPreview";
 import { getTenderCBAAPI, getTenderCBADetailAPI, sendForCheckingAPI } from "../../api/tenderApi";
 import { useUI } from "../../store/uiStore";
+import { useNavigate } from "react-router-dom";
 
 const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name 4", "Bidder Name 5", "Bidder Name 6"];
 
@@ -36,6 +37,8 @@ const CBACell = ({tenderId, bidId, property, openPreview}) => {
             setValue(val.length > 0 ? val.join(",") : "N/A");
           } else if (typeof val === "boolean") {
             setValue(val ? "True" : "False");
+          } else if (typeof val === "object") {
+            setValue(val.name || JSON.stringify(val));
           } else {
             setValue(val.toString());
           }
@@ -57,7 +60,7 @@ const CBACell = ({tenderId, bidId, property, openPreview}) => {
           openPreview(cellData.file_path, cellData.page_number || 1, cellData.doc_name);
         }
       }}
-      sx={{"&:hover": {background: "#ee2ff"}, cursor: "pointer"}}  
+      sx={{"&:hover": {background: "#f1f5f9"}, cursor: "pointer"}}  
     >
       {value}
     </Box>
@@ -67,6 +70,7 @@ const CBACell = ({tenderId, bidId, property, openPreview}) => {
 const CBATab = () => {
   const { id } = useParams();
   const { showNotification } = useUI();
+  const navigate = useNavigate();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [bidders, setBidders] = useState([]);
@@ -106,6 +110,7 @@ const CBATab = () => {
       showNotification("Failed to send tender for checking");
     } finally {
       setIsSending(false);
+      navigate(`/dashboard`);
     }
   };
 
@@ -197,7 +202,7 @@ const CBATab = () => {
         </Box>
 
         {/* BODY */}
-        <Box sx={{maxHeight: "1000px", overflowY: 'auto'}}>
+        <Box sx={{maxHeight: "400px", overflowY: 'auto'}}>
           {rows.map((row, i) => (
             <Box
               key={i}

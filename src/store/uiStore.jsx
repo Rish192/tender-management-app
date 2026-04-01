@@ -28,31 +28,33 @@ export const UIProvider = ({ children }) => {
   });
 
   // ✅ GLOBAL NOTIFICATION (TOP RIGHT TOAST)
-  const showNotification = (message) => {
+  const showNotification = useCallback((message) => {
     setNotification(message);
     setTimeout(() => {
       setNotification(null);
     }, 3000);
-  };
+  }, []);
 
   const refreshPanelNotifications = useCallback(async () => {
     const data = await getNotificationsAPI();
     if (Array.isArray(data)) {
-      data.forEach(newNotif => {
-        const isNew = !panelNotifications.some(old => old.notification_id === newNotif.notification_id);
+      setPanelNotifications((prev) => {
+        data.forEach(newNotif => {
+          const isNew = !panelNotifications.some(old => old.notification_id === newNotif.notification_id);
 
-        if (isNew && newNotif.status === "UNREAD") {
-          if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
-            showNotification("Document extracted successfully");
+          if (isNew && newNotif.status === "UNREAD") {
+            if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
+              showNotification("Document extracted successfully");
+            }
           }
-        }
+        });
       });
 
       setPanelNotifications(data);
       const unread = data.filter(n => n.status !== "READ").length;
       setNotificationCount(unread);
     }
-  }, [panelNotifications, showNotification]);
+  }, [showNotification]);
 
   const markAllAsRead = async () => {
     const unreadIds = panelNotifications
