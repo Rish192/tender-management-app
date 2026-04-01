@@ -129,27 +129,17 @@ export const getTenderCBADetailAPI = async (tenderId, bidId, property) => {
   }
 };
 
-// 🔹 SEND FOR CHECKING (SIMULATE PROCESSING → READY)
-export const sendForCheckingAPI = async (id) => {
-  const tenders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-  // Step 1: Processing
-  let updated = tenders.map((t) =>
-    t.id === id ? { ...t, status: "Processing" } : t
-  );
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-
-  // Step 2: After delay → Ready
-  setTimeout(() => {
-    const latest = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-    const finalData = latest.map((t) =>
-      t.id === id ? { ...t, status: "Ready" } : t
-    );
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(finalData));
-  }, 4000);
-
-  return true;
+// SEND FOR CHECKING
+export const sendForCheckingAPI = async (tenderId) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/tender/${tenderId}/send-for-checking`, {}, {
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error sending tender for checking: ", err);
+    throw err;
+  }
 };

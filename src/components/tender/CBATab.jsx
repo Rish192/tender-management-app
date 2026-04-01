@@ -15,7 +15,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PDFPreview from "../common/PDFPreview";
-import { getTenderCBAAPI, getTenderCBADetailAPI } from "../../api/tenderApi";
+import { getTenderCBAAPI, getTenderCBADetailAPI, sendForCheckingAPI } from "../../api/tenderApi";
+import { useUI } from "../../store/uiStore";
 
 const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name 4", "Bidder Name 5", "Bidder Name 6"];
 
@@ -65,9 +66,12 @@ const CBACell = ({tenderId, bidId, property, openPreview}) => {
 
 const CBATab = () => {
   const { id } = useParams();
+  const { showNotification } = useUI();
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const [bidders, setBidders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
   const [previewData, setPreviewData] = useState({
     url: "",
     page: 1,
@@ -89,6 +93,21 @@ const CBATab = () => {
 
     if (id) fetchCbaData();
   }, [id]);
+
+  const handleSendForChecking = async () => {
+    setIsSending(true);
+    try {
+      const res = await sendForCheckingAPI(id);
+      if (res.status === "success" || res.new_status === "SENT_FOR_CHECKING") {
+        showNotification("Tender has been sent for checking successfully");
+      }
+    } catch (err) {
+      console.log("Error sending tender for checking: ", err);
+      showNotification("Failed to send tender for checking");
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const openPreview = (url, page, fileName) => {
     setPreviewData({ url, page, fileName });
@@ -116,9 +135,11 @@ const CBATab = () => {
 
           <Button
             variant="contained"
+            disabled={isSending}
+            onClick={handleSendForChecking}
             sx={{ background: "#2F4DB5", textTransform: "none" }}
           >
-            Send for Checking
+            {isSending ? "Sending..." : "Send for Checking"}
           </Button>
         </Box>
       </Box>

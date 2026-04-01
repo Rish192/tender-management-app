@@ -117,11 +117,7 @@ const UploadTenderModal = () => {
 
         <Box display="flex" justifyContent="space-between" mt={2}>
           <Typography fontSize={11} color="#6b7280">
-            Supported formats: PNG, JPG, PDF, MP4
-          </Typography>
-
-          <Typography fontSize={11} color="#6b7280">
-            Max size: 25MB
+            Supported format: PDF
           </Typography>
         </Box>
 
