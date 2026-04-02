@@ -15,14 +15,14 @@ const TenderOverview = () => {
   const { id } = useParams();
   const { tenders } = useTenderStore();
 
-  const tender = tenders?.find((t) => String(t.id) === id);
+  const tender = tenders?.find((t) => String(t.tender_id) === id);
 
   return (
     <Box display="flex" height="100vh">
       <Sidebar />
 
       {/* ✅ MAIN CONTENT WRAPPER (IMPORTANT) */}
-      <Box flex={1} p={3} pt={2} bgcolor={colors.background}>
+      <Box flex={1} p={3} pt={2} bgcolor={colors.background} minWidth={0}>
 
         {/* ✅ HEADER + TABS (SAME ROW) */}
         <Box display="flex" justifyContent="space-between" alignItems="center">

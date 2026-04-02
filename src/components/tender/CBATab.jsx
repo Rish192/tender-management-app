@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name 4", "Bidder Name 5", "Bidder Name 6"];
 
-const CBACell = ({tenderId, bidId, property, openPreview}) => {
+const CBACell = ({ tenderId, bidId, property, openPreview }) => {
   const [value, setValue] = useState("Loading...");
   const [cellData, setCellData] = useState(null);
 
@@ -54,13 +54,13 @@ const CBACell = ({tenderId, bidId, property, openPreview}) => {
 
   return (
     <Box
-      flex={1} p={2}
+      flex={1} minWidth={160} p={2}
       onClick={() => {
         if (cellData?.file_path) {
           openPreview(cellData.file_path, cellData.page_number || 1, cellData.doc_name);
         }
       }}
-      sx={{"&:hover": {background: "#f1f5f9"}, cursor: "pointer"}}  
+      sx={{ "&:hover": { background: "#f1f5f9" }, cursor: "pointer" }}
     >
       {value}
     </Box>
@@ -178,91 +178,130 @@ const CBATab = () => {
       </Box>
 
       {/* ================= TABLE ================= */}
-      <Box mt={2} sx={{ borderRadius: 2, overflow: "hidden" }}>
-        {/* HEADER */}
-        <Box
-          display="flex"
-          sx={{
-            background: "linear-gradient(90deg,#2F4DB5,#4C6ED7)",
-            color: "#fff",
-            px: 2,
-            py: 1.5,
-            fontSize: 13,
-            position: 'sticky',
-            top: 0,
-            zIndex: 1
-          }}
-        >
-          <Box flex={2}>Bidder Details</Box>
-          {bidders.map((bidder) => (
-            <Box key={bidder.bidId} flex={1}>
-              {bidder.bidderName}
+      <Box mt={2} sx={{
+        borderRadius: 2,
+        overflow: "auto",
+        maxHeight: "500px",
+        border: "1px solid #e5e7eb",
+        background: "#fff",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.05)"
+      }}>
+        <Box sx={{ minWidth: "max-content" }}>
+          {/* HEADER */}
+          <Box
+            display="flex"
+            sx={{
+              background: "#2F4DB5", // Solid color so sticky overlaps hide content below
+              color: "#fff",
+              fontSize: 13,
+              position: 'sticky',
+              top: 0,
+              zIndex: 10
+            }}
+          >
+            <Box flex={0.5} minWidth={100} px={2} py={1.5} sx={{ position: 'sticky', left: 0, background: "#2F4DB5", zIndex: 11, borderRight: "1px solid rgba(255,255,255,0.2)" }}>
+              Bidder Details
             </Box>
-          ))}
-        </Box>
+            {bidders.map((bidder) => (
+              <Box key={bidder.bidId} flex={1} minWidth={160} px={2} py={1.5}>
+                {bidder.bidderName}
+              </Box>
+            ))}
+          </Box>
 
-        {/* BODY */}
-        <Box sx={{maxHeight: "400px", overflowY: 'auto'}}>
-          {rows.map((row, i) => (
+          {/* BODY */}
+          <Box>
+            {rows.map((row, i) => (
+              <Box
+                key={i}
+                display="flex"
+                sx={{
+                  background: i % 2 === 0 ? "#f8fafc" : "#ffffff",
+                  borderBottom: "1px solid #e5e7eb",
+                }}
+              >
+                <Box
+                  flex={0.5} minWidth={100} p={2} fontWeight={500}
+                  sx={{
+                    position: 'sticky',
+                    left: 0,
+                    background: i % 2 === 0 ? "#f8fafc" : "#ffffff",
+                    zIndex: 5,
+                    borderRight: "1px solid #e5e7eb",
+                    boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                  }}
+                >
+                  {row.label}
+                </Box>
+
+                {bidders.map((bidder) => (
+                  <CBACell
+                    key={bidder.bidId}
+                    tenderId={id}
+                    bidId={bidder.bidId}
+                    property={row.apiKey}
+                    openPreview={openPreview}
+                  />
+                ))}
+              </Box>
+            ))}
+          </Box>
+
+          {/* DOCUMENT CHECKLIST */}
+          <Box display="flex" sx={{ background: "#f1f5f9", borderBottom: "1px solid #e5e7eb" }}>
             <Box
-              key={i}
-              display="flex"
+              flex={0.5} minWidth={100} p={2} fontWeight={600}
               sx={{
-                background: i % 2 === 0 ? "#f8fafc" : "#ffffff",
-                borderBottom: "1px solid #e5e7eb",
+                position: 'sticky',
+                left: 0,
+                background: "#f1f5f9",
+                zIndex: 5,
+                borderRight: "1px solid #e5e7eb",
+                boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
               }}
             >
-              <Box flex={2} p={2} fontWeight={500}>
-                {row.label}
+              Document Checklist
+            </Box>
+
+            {bidders.map((_, i) => (
+              <Box key={i} flex={1} minWidth={160} p={2} display="flex" alignItems="center" gap={1}>
+                {i % 2 === 0 ? (
+                  <CheckCircleIcon sx={{ color: "green" }} />
+                ) : (
+                  <CancelIcon sx={{ color: "red" }} />
+                )}
+                <Typography fontSize={12}>Term 1</Typography>
+                <ArrowDropDownIcon />
               </Box>
-
-              {bidders.map((bidder) => (
-                <CBACell
-                  key={bidder.bidId}
-                  tenderId={id}
-                  bidId={bidder.bidId}
-                  property={row.apiKey}
-                  openPreview={openPreview}
-                />
-              ))}
-            </Box>
-          ))}
-        </Box>
-
-        {/* DOCUMENT CHECKLIST */}
-        <Box display="flex" sx={{ background: "#f1f5f9" }}>
-          <Box flex={2} p={2} fontWeight={600}>
-            Document Checklist
+            ))}
           </Box>
 
-          {bidders.map((_, i) => (
-            <Box key={i} flex={1} p={2} display="flex" alignItems="center" gap={1}>
-              {i % 2 === 0 ? (
-                <CheckCircleIcon sx={{ color: "green" }} />
-              ) : (
-                <CancelIcon sx={{ color: "red" }} />
-              )}
-              <Typography fontSize={12}>Term 1</Typography>
-              <ArrowDropDownIcon />
+          {/* ACTION ROW */}
+          <Box display="flex" sx={{ background: "#ffffff" }}>
+            <Box
+              flex={0.5} minWidth={100} p={2} fontWeight={600}
+              sx={{
+                position: 'sticky',
+                left: 0,
+                background: "#ffffff",
+                zIndex: 5,
+                borderRight: "1px solid #e5e7eb",
+                boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+              }}
+            >
+              Actions
             </Box>
-          ))}
-        </Box>
 
-        {/* ACTION ROW */}
-        <Box display="flex" sx={{ background: "#ffffff" }}>
-          <Box flex={2} p={2} fontWeight={600}>
-            Actions
+            {bidders.map((_, i) => (
+              <Box key={i} flex={1} minWidth={160} p={2} display="flex" alignItems="center" gap={1}>
+                <Typography fontSize={12}>No Query</Typography>
+
+                <IconButton size="small">
+                  <AddIcon sx={{ color: "#2F4DB5" }} />
+                </IconButton>
+              </Box>
+            ))}
           </Box>
-
-          {bidders.map((_, i) => (
-            <Box key={i} flex={1} p={2} display="flex" alignItems="center" gap={1}>
-              <Typography fontSize={12}>No Query</Typography>
-
-              <IconButton size="small">
-                <AddIcon sx={{ color: "#2F4DB5" }} />
-              </IconButton>
-            </Box>
-          ))}
         </Box>
       </Box>
 
@@ -287,7 +326,7 @@ const CBATab = () => {
       </Box>
 
       {/* PDF PREVIEW */}
-      <PDFPreview open={previewOpen} onClose={() => setPreviewOpen(false)} data={previewData}/>
+      <PDFPreview open={previewOpen} onClose={() => setPreviewOpen(false)} data={previewData} />
     </Box>
   );
 };

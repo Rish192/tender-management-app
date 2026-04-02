@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-const PieChart = () => {
+const PieChart = ({ totalBidders }) => {
   return (
     <Box
       sx={{
@@ -31,7 +31,7 @@ const PieChart = () => {
           Total Bidders
         </Typography>
         <Typography fontSize={22} fontWeight={600} color="#1e3a8a">
-          450
+          {totalBidders}
         </Typography>
       </Box>
     </Box>

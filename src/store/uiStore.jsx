@@ -1,6 +1,6 @@
 // src/store/uiStore.jsx
 
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { getNotificationsAPI, markNotificationAsReadAPI } from "../api/tenderApi";
 import NotificationPanel from './../components/common/NotificationPanel';
 
@@ -27,6 +27,8 @@ export const UIProvider = ({ children }) => {
     date: "",
   });
 
+  const shownNotificationsRef = useRef(new Set());
+
   // ✅ GLOBAL NOTIFICATION (TOP RIGHT TOAST)
   const showNotification = useCallback((message) => {
     setNotification(message);
@@ -38,16 +40,15 @@ export const UIProvider = ({ children }) => {
   const refreshPanelNotifications = useCallback(async () => {
     const data = await getNotificationsAPI();
     if (Array.isArray(data)) {
-      setPanelNotifications((prev) => {
-        data.forEach(newNotif => {
-          const isNew = !panelNotifications.some(old => old.notification_id === newNotif.notification_id);
+      data.forEach(newNotif => {
+        const hasbeenShown = shownNotificationsRef.current.has(newNotif.notification_id); 
 
-          if (isNew && newNotif.status === "UNREAD") {
-            if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
-              showNotification("Document extracted successfully");
-            }
+        if (newNotif.status === "UNREAD" && !hasbeenShown) {
+          if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
+            showNotification("Document extracted successfully");
+            shownNotificationsRef.current.add(newNotif.notification_id);
           }
-        });
+        }
       });
 
       setPanelNotifications(data);

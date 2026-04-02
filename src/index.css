@@ -4,8 +4,11 @@ body {
   margin: 0;
   font-family: "Inter", sans-serif;
   background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  overflow: hidden;
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }

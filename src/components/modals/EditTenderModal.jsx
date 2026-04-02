@@ -118,11 +118,22 @@ const EditTenderModal = () => {
 
           });
           if (details.domain && details.domain.length > 0) {
-            setRows(details.domain.map(d => ({
-              industry: d.industry || "",
-              s1: d.sector || "",
-              s2: ""
-            })));
+            const groupedRows = [];
+            const industryMap = {};
+
+            details.domain.forEach((d) => {
+              const indName = d.industry || "";
+              const secName = d.sector || "";
+
+              if (industryMap[indName]) {
+                industryMap[indName].s2 = secName;
+              } else {
+                const newRow = { industry: indName, s1: secName, s2: "" };
+                industryMap[indName] = newRow;
+                groupedRows.push(newRow);
+              }
+            });
+            setRows(groupedRows);
           }
         }
       }
@@ -176,10 +187,13 @@ const EditTenderModal = () => {
       tender_status: "DRAFT_SAVED",
       tender_details: {
         ...formData,
-        domain: rows.map((r) => ({
-          industry: r.industry,
-          sector: r.s1,
-        })),
+        domain: rows.reduce((acc, r) => {
+          if (r.industry) {
+            if (r.s1) acc.push({ industry: r.industry, sector: r.s1 });
+            if (r.s2) acc.push({ industry: r.industry, sector: r.s2 });
+          }
+          return acc;
+        }, []),
       },
     };
 
@@ -206,27 +220,24 @@ const EditTenderModal = () => {
 
     try {
       const payload = {
+        tender_status: "VALIDATED",
         tender_details: {
           ...formData,
-          domain: rows.map((r) => ({
-            industry: r.industry,
-            sector: r.s1,
-          })),
+          domain: rows.reduce((acc, r) => {
+            if (r.industry) {
+              if (r.s1) acc.push({ industry: r.industry, sector: r.s1 });
+              if (r.s2) acc.push({ industry: r.industry, sector: r.s2 });
+            }
+            return acc;
+          }, []),
         },
       };
 
       const res = await updateTenderAPI(tenderId, payload);
 
       if (res) {
-        const existingTender = tenders.find(t => t.tender_id === tenderId);
-        const updatedData = {
-          ...existingTender,
-          ...payload,
-          isValidated: true
-        }
-        updateTender(tenderId, updatedData);
+        updateTender(tenderId, payload);
         showNotification("Tender validated successfully");
-
         setEditOpen(false);
         navigate(`/tender/${tenderId}`);
       }
@@ -434,7 +445,8 @@ const EditTenderModal = () => {
             <Box display="flex" gap={2}>
               <Button>Reset</Button>
               <Button onClick={handleSaveDraft}>Save Draft</Button>
-              <Button variant="contained" onClick={handleSubmit} disabled={!isCbaReady} 
+              <Button variant="contained" onClick={handleSubmit} 
+              disabled={!isCbaReady} 
                 sx={{ background: isCbaReady ? "#2F4DB5" : "#cccccc",
                       "&:disabled": {background: "#cccccc", color: "#666"}
                  }}>
