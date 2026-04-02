@@ -117,7 +117,7 @@ const TenderTable = () => {
                 {/* 👁 VIEW */}
                 <IconButton
                   onClick={() => navigate(`/tender/${t.tender_id}`)}
-                  disabled={t.tender_status !== "Validated"}
+                  disabled={t.tender_status !== "Validated" && t.tender_status !== "Sent for Checking"}
                   size="small"
                   sx={{
                     background: "#2F4DB5",
