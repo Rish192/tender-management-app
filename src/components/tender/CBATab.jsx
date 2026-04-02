@@ -102,7 +102,7 @@ const CBATab = () => {
     setIsSending(true);
     try {
       const res = await sendForCheckingAPI(id);
-      if (res.status === "success" || res.new_status === "SENT_FOR_CHECKING") {
+      if (res.status === "success" || res.new_status === "Sent for Checking") {
         showNotification("Tender has been sent for checking successfully");
       }
     } catch (err) {

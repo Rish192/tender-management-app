@@ -14,12 +14,11 @@ import { useTenderStore } from "../../store/tenderStore";
 import { addTenderAPI, getTenderListAPI } from "../../api/tenderApi";
 
 const UploadTenderModal = () => {
-  const { uploadOpen, setUploadOpen, showNotification } = useUI();
+  const { uploadOpen, setUploadOpen, showNotification, isUploadingTender, setIsUploadingTender } = useUI();
   const { setTenders } = useTenderStore(); // ✅ IMPORTANT
 
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
-  const [uploading, setUploading] = useState(false);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -57,7 +56,7 @@ const UploadTenderModal = () => {
       showNotification("Please select a file");
       return;
     }
-    setUploading(true);
+    setIsUploadingTender(true);
     try {
       const res = await addTenderAPI(file);
 
@@ -78,14 +77,15 @@ const UploadTenderModal = () => {
       const errorMsg = err.response?.data?.detail?.[0]?.msg || "Upload failed";
       showNotification(errorMsg);
     } finally { 
-      setUploading(false);
+      setIsUploadingTender(false);
     }
   };
 
   return (
     <Modal open={uploadOpen} onClose={() => {
-      if (!uploading) {
-        setUploadOpen(false);
+      setUploadOpen(false);
+      // Clean up file only if we are completely done/aborted
+      if (!isUploadingTender) {
         setFile(null);
       }
     }}>
@@ -100,7 +100,7 @@ const UploadTenderModal = () => {
           position: "relative",
         }}
       >
-        {uploading && (
+        {isUploadingTender && (
           <Box sx={{
               position: "absolute",
               top: 0,

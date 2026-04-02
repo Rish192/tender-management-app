@@ -184,7 +184,7 @@ const EditTenderModal = () => {
 
   try {
     const payload = {
-      tender_status: "DRAFT_SAVED",
+      tender_status: "Saved Draft",
       tender_details: {
         ...formData,
         domain: rows.reduce((acc, r) => {
@@ -220,7 +220,7 @@ const EditTenderModal = () => {
 
     try {
       const payload = {
-        tender_status: "VALIDATED",
+        tender_status: "Validated",
         tender_details: {
           ...formData,
           domain: rows.reduce((acc, r) => {

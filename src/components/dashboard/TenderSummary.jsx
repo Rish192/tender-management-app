@@ -12,15 +12,15 @@ const TenderSummary = () => {
   const summaryData = useMemo(() => {
     const list = Array.isArray(tenders) ? tenders : [];
     const counts = {
-      DRAFT_SAVED: list.filter(t => t.tender_status === "DRAFT_SAVED").length,
-      SENT_FOR_CHECKING: list.filter(t => t.tender_status === "SENT_FOR_CHECKING").length,
-      BID_DONE: list.filter(t => t.tender_status === "BID_DONE").length,
-      RFP_DONE: list.filter(t => t.tender_status === "RFP_DONE").length,
+      SAVED_DRAFT: list.filter(t => t.tender_status === "Saved Draft").length,
+      SENT_FOR_CHECKING: list.filter(t => t.tender_status === "Sent for Checking").length,
+      BID_DONE: list.filter(t => t.tender_status === "Ready to Validate").length,
+      RFP_Completed: list.filter(t => t.tender_status === "RFP Completed").length,
     };
     return [
-      { name: "RFP Done", value: counts.RFP_DONE, color: "#0EA5E9", label: "RFP Completed" },
-      { name: "Drafts", value: counts.DRAFT_SAVED, color: "#6366F1", label: "Draft Saved" },
-      { name: "Bid Done", value: counts.BID_DONE, color: "#14B8A6", label: "Bid Evaluation Done" },
+      { name: "RFP Completed", value: counts.RFP_Completed, color: "#0EA5E9", label: "RFP Completed" },
+      { name: "Drafts", value: counts.SAVED_DRAFT, color: "#6366F1", label: "Saved Drafts" },
+      { name: "Bid Done", value: counts.BID_DONE, color: "#14B8A6", label: "Ready to Validate" },
       { name: "Checking", value: counts.SENT_FOR_CHECKING, color: "#3B82F6", label: "Sent for Checking" },
     ];
   }, [tenders]);

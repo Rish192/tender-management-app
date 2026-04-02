@@ -15,6 +15,10 @@ export const UIProvider = ({ children }) => {
   const [notificationPanelOpen, setNotificationPanelOpen] = useState(false);
   const [panelNotifications, setPanelNotifications] = useState([]);
 
+  // ✅ GLOBAL UPLOAD STATES
+  const [isUploadingTender, setIsUploadingTender] = useState(false);
+  const [isUploadingCba, setIsUploadingCba] = useState(false);
+
   // ✅ NEW (for Edit flow)
   const [selectedTenderId, setSelectedTenderId] = useState(null);
 
@@ -116,6 +120,12 @@ export const UIProvider = ({ children }) => {
 
         cbaUploadOpen,
         setCbaUploadOpen,
+
+        // 🔹 Upload States
+        isUploadingTender,
+        setIsUploadingTender,
+        isUploadingCba,
+        setIsUploadingCba,
       }}
     >
       {children}

@@ -6,10 +6,9 @@ import { useUI } from "../../store/uiStore";
 import { uploadCBAAPI } from "../../api/tenderApi";
 
 const UploadCbaModal = () => {
-    const {cbaUploadOpen, setCbaUploadOpen, showNotification, selectedTenderId} = useUI();
+    const {cbaUploadOpen, setCbaUploadOpen, showNotification, selectedTenderId, isUploadingCba, setIsUploadingCba} = useUI();
     const [file, setFile] = useState(null);
     const [dragActive, setDragActive] = useState(false);
-    const [uploading, setUploading] = useState(false);
 
     const handleDrag = (e) => {
         e.preventDefault();
@@ -43,7 +42,7 @@ const UploadCbaModal = () => {
             showNotification("Please select a folder or zip file");
             return;
         }
-        setUploading(true);
+        setIsUploadingCba(true);
         try {
             const res = await uploadCBAAPI(selectedTenderId, file);
             if (res.status === "success" || res) {
@@ -58,14 +57,14 @@ const UploadCbaModal = () => {
             console.error("CBA Upload error: ", err);
             showNotification("CBA upload failed");
         } finally {
-            setUploading(false);
+            setIsUploadingCba(false);
         }
     };
 
     return (
         <Modal open={cbaUploadOpen} onClose={() => {
-            if (!uploading) {
-                setCbaUploadOpen(false);
+            setCbaUploadOpen(false);
+            if (!isUploadingCba) {
                 setFile(null);
             }
         }}>
@@ -78,7 +77,7 @@ const UploadCbaModal = () => {
                 boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
                 position: "relative",
             }}>
-                {uploading && (
+                {isUploadingCba && (
                     <Box sx={{
                         position: "absolute",
                         top: 0,
