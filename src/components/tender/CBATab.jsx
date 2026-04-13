@@ -54,13 +54,22 @@ const CBACell = ({ tenderId, bidId, property, openPreview }) => {
 
   return (
     <Box
-      flex={1} minWidth={160} p={2}
+      flex={1}
+      minWidth={160}
+      px={2}
+      py={1.5}
       onClick={() => {
         if (cellData?.file_path) {
           openPreview(cellData.file_path, cellData.page_number || 1, cellData.doc_name);
         }
       }}
-      sx={{ "&:hover": { background: "#f1f5f9" }, cursor: "pointer" }}
+      sx={{
+        "&:hover": { background: "#f1f5f9" },
+        cursor: "pointer",
+        wordBreak: "break-word",
+        whiteSpace: "normal",
+        lineHeight: 1.4
+      }}
     >
       {value}
     </Box>
@@ -149,35 +158,7 @@ const CBATab = () => {
         </Box>
       </Box>
 
-      {/* FILTER BAR */}
-      <Box
-        mt={2}
-        sx={{
-          background: "#eef2f7",
-          borderRadius: 2,
-          p: 2,
-          display: "flex",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
-        <Typography fontWeight={500}>Evaluation Status</Typography>
-
-        {["Acceptable", "Non Acceptable", "Generate Query", "Acceptable", "Non Acceptable", "Query Raised"].map(
-          (x, i) => (
-            <Select
-              key={i}
-              size="small"
-              defaultValue={x}
-              sx={{ minWidth: 150, background: "#fff" }}
-            >
-              <MenuItem value={x}>{x}</MenuItem>
-            </Select>
-          )
-        )}
-      </Box>
-
-      {/* ================= TABLE ================= */}
+      {/* TABLE */}
       <Box mt={2} sx={{
         borderRadius: 2,
         overflow: "auto",
@@ -187,11 +168,42 @@ const CBATab = () => {
         boxShadow: "0 4px 10px rgba(0,0,0,0.05)"
       }}>
         <Box sx={{ minWidth: "max-content" }}>
+
+          <Box display="flex" sx={{ background: "#eef2f7", borderBottom: "1px solid #e5e7eb" }}>
+      
+            <Box
+              flex={0.5}
+              minWidth={100}
+              p={2}
+              fontWeight={500}
+              sx={{
+                position: 'sticky',
+                left: 0,
+                background: "#eef2f7",
+                zIndex: 11,
+                borderRight: "1px solid #e5e7eb"
+              }}
+            >
+              Evaluation Status
+            </Box>
+
+            {bidders.map((bidder) => (
+              <Box key={bidder.bidId} flex={1} minWidth={160} p={1}>
+                <Select fullWidth size="small" defaultValue="Acceptable" sx={{ background: "#fff" }}>
+                  <MenuItem value="Acceptable">Acceptable</MenuItem>
+                  <MenuItem value="Non Acceptable">Non Acceptable</MenuItem>
+                  <MenuItem value="Generate Query">Generate Query</MenuItem>
+                  <MenuItem value="Query Raised">Query Raised</MenuItem>
+                </Select>
+              </Box>
+            ))}
+          </Box>
+
           {/* HEADER */}
           <Box
             display="flex"
             sx={{
-              background: "#2F4DB5", // Solid color so sticky overlaps hide content below
+              background: "#2F4DB5",
               color: "#fff",
               fontSize: 13,
               position: 'sticky',
@@ -306,23 +318,34 @@ const CBATab = () => {
       </Box>
 
       {/* PAGINATION */}
-      <Box display="flex" justifyContent="center" mt={2} gap={1}>
-        <Button>{"<"}</Button>
-        {[1, 2, 3].map((p) => (
-          <Box
-            key={p}
-            sx={{
-              px: 2,
-              py: 0.5,
-              background: p === 1 ? "#2F4DB5" : "#e5e7eb",
-              color: p === 1 ? "#fff" : "#000",
-              borderRadius: 1,
-            }}
-          >
-            {p}
-          </Box>
-        ))}
-        <Button>{">"}</Button>
+      <Box
+        sx={{
+          width: "100%",    
+          display: "flex",
+          justifyContent: "center",
+          mt: 2,
+        }}
+      >
+        <Box display="flex" gap={1}>
+          <Button>{"<"}</Button>
+
+          {[1, 2, 3].map((p) => (
+            <Box
+              key={p}
+              sx={{
+                px: 2,
+                py: 0.5,
+                background: p === 1 ? "#2F4DB5" : "#e5e7eb",
+                color: p === 1 ? "#fff" : "#000",
+                borderRadius: 1,
+              }}
+            >
+              {p}
+            </Box>
+          ))}
+
+          <Button>{">"}</Button>
+        </Box>
       </Box>
 
       {/* PDF PREVIEW */}
