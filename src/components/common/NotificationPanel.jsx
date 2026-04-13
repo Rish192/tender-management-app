@@ -1,5 +1,6 @@
 // src/components/common/NotificationPanel.jsx
 
+import { useState } from "react";
 import {
   Modal,
   Box,
@@ -89,9 +90,8 @@ const NotificationPanel = ({
 export default NotificationPanel;
 
 
-/* ================= ITEM ================= */
-
 const NotificationItem = ({ data, onView, onClose }) => {
+  const [isRead, setIsRead] = useState(false);
   return (
     <Box
       sx={{
@@ -112,33 +112,58 @@ const NotificationItem = ({ data, onView, onClose }) => {
       </Typography>
 
       {/* ACTIONS */}
-      <Box display="flex" gap={1}>
+      <Box display="flex" alignItems="center" gap={1}>
+
+        {/* MARK AS READ */}
+        <Typography
+          onClick={() => setIsRead(!isRead)}
+          sx={{
+            fontSize: 12,
+            px: 1.5,
+            py: 0.5,
+            borderRadius: "999px",
+            cursor: "pointer",
+            border: "1px solid",
+            borderColor: isRead ? "green" : "#ccc",
+            color: isRead ? "green" : "gray",
+            background: isRead ? "#e6f9ec" : "#fff",
+          }}
+        >
+          Mark as Read
+        </Typography>
+
         {/* VIEW */}
         {data.showView && (
           <IconButton
             size="small"
             onClick={onView}
             sx={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
               background: "#2F4DB5",
               color: "#fff",
-              "&:hover": { background: "#1e3a8a" },
             }}
           >
             <VisibilityIcon fontSize="small" />
           </IconButton>
         )}
 
-        {/* CLOSE */}
-        <IconButton
+        {/* CLOSE BUTTON */}
+        {/*<IconButton
           size="small"
           onClick={onClose}
           sx={{
+            width: 32,           
+            height: 32,          
+            borderRadius: "50%", 
             background: "#fecaca",
             color: "#7f1d1d",
           }}
         >
           ✕
-        </IconButton>
+        </IconButton>*/}
+
       </Box>
     </Box>
   );

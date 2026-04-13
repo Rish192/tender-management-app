@@ -1,6 +1,6 @@
 // src/services/apiClient.js
 
-const BASE_URL = "http://localhost:3000"; // change later
+const BASE_URL = "http://18.205.19.187:8000"; // change later
 
 export const apiClient = async (url, options = {}) => {
   try {
