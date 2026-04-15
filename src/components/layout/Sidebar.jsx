@@ -188,7 +188,7 @@ const Sidebar = () => {
           {menuItem(PersonIcon, "Profile")}
         </Box>
 
-        {/* SIGN OUT */}
+        {/* LOGOUT */}
         <Box
           mt={2}
           sx={{
@@ -218,7 +218,14 @@ const Sidebar = () => {
                 transition: "all 0.3s ease",
               }}
             >
-              <Typography fontSize={13}>SIGN OUT</Typography>
+              <Typography 
+                fontSize={13}
+                onClick={() => {
+                  navigate("/");
+                }}  
+              >
+                Logout
+              </Typography>
             </Box>
           </Box>
         </Box>

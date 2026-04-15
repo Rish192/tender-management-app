@@ -45,12 +45,20 @@ export const UIProvider = ({ children }) => {
     const data = await getNotificationsAPI();
     if (Array.isArray(data)) {
       data.forEach(newNotif => {
-        const hasbeenShown = shownNotificationsRef.current.has(newNotif.notification_id); 
+        const hasbeenShown = shownNotificationsRef.current.has(newNotif.notification_id);
 
         if (newNotif.status === "UNREAD" && !hasbeenShown) {
           if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
             showNotification("Document extracted successfully");
             shownNotificationsRef.current.add(newNotif.notification_id);
+          } else if (newNotif.message && newNotif.message.includes("CBA Analysis is completed")) {
+            showNotification("CBA Analysis is completed");
+            shownNotificationsRef.current.add(newNotif.notification_id);
+            if (newNotif.tender_id) {
+              window.dispatchEvent(new CustomEvent("tenderStatusUpdate", {
+                detail: { tender_id: newNotif.tender_id, status: "CBA Completed" }
+              }));
+            }
           }
         }
       });
@@ -61,26 +69,35 @@ export const UIProvider = ({ children }) => {
     }
   }, [showNotification]);
 
-  const markAllAsRead = async () => {
-    const unreadIds = panelNotifications
-      .filter((n) => n.status !== "READ")
-      .map((n) => n.notification_id);
+  // const markAllAsRead = async () => {
+  //   const unreadIds = panelNotifications
+  //     .filter((n) => n.status !== "READ")
+  //     .map((n) => n.notification_id);
 
-    if (unreadIds.length === 0) return;
+  //   if (unreadIds.length === 0) return;
 
+  //   try {
+  //     await Promise.all(unreadIds.map((id) => markNotificationAsReadAPI(id)));
+  //     await refreshPanelNotifications();
+  //   } catch (err) {
+  //     console.error("Failed to mark notifications as read: ", err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (notificationPanelOpen) {
+  //     markAllAsRead();
+  //   }
+  // }, [notificationPanelOpen]);
+
+  const markAsRead = async (notificationId) => {
     try {
-      await Promise.all(unreadIds.map((id) => markNotificationAsReadAPI(id)));
+      await markNotificationAsReadAPI(notificationId);
       await refreshPanelNotifications();
     } catch (err) {
-      console.error("Failed to mark notifications as read: ", err);
+      console.error("Failed to mark notification as read: ", err);
     }
   };
-
-  useEffect(() => {
-    if (notificationPanelOpen) {
-      markAllAsRead();
-    }
-  }, [notificationPanelOpen]);
 
   useEffect(() => {
     refreshPanelNotifications();
@@ -117,6 +134,7 @@ export const UIProvider = ({ children }) => {
         setNotificationPanelOpen,
         panelNotifications,
         refreshPanelNotifications,
+        markAsRead,
 
         cbaUploadOpen,
         setCbaUploadOpen,

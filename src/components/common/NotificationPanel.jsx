@@ -10,6 +10,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import { useUI } from "../../store/uiStore";
+
 const NotificationPanel = ({
   open,
   onClose,
@@ -91,11 +93,22 @@ export default NotificationPanel;
 
 
 const NotificationItem = ({ data, onView, onClose }) => {
-  const [isRead, setIsRead] = useState(false);
+  
+  const { markAsRead } = useUI();
+
+  const isRead = data.status === "READ";
+
+  const handleMarkRead = (e) => {
+    e.stopPropagation();
+    if (!isRead) {
+      markAsRead(data.notification_id);
+    }
+  };
+
   return (
     <Box
       sx={{
-        background: "#f8fafc",
+        background: isRead ? '#f1f5f9' : "#fff", //#f8fafc
         border: "1px solid #cbd5e1",
         borderRadius: 2,
         px: 2,
@@ -104,6 +117,7 @@ const NotificationItem = ({ data, onView, onClose }) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        opacity: isRead ? 0.7 : 1
       }}
     >
       {/* TEXT */}
@@ -116,7 +130,7 @@ const NotificationItem = ({ data, onView, onClose }) => {
 
         {/* MARK AS READ */}
         <Typography
-          onClick={() => setIsRead(!isRead)}
+          onClick={handleMarkRead}
           sx={{
             fontSize: 12,
             px: 1.5,
@@ -124,12 +138,19 @@ const NotificationItem = ({ data, onView, onClose }) => {
             borderRadius: "999px",
             cursor: "pointer",
             border: "1px solid",
-            borderColor: isRead ? "green" : "#ccc",
-            color: isRead ? "green" : "gray",
-            background: isRead ? "#e6f9ec" : "#fff",
+            // borderColor: isRead ? "green" : "#ccc",
+            // color: isRead ? "green" : "gray",
+            // background: isRead ? "#e6f9ec" : "#fff",
+            borderColor: isRead ? "#22c55e" : "#3b82f6",
+            color: isRead ? "#166534" : "#1d4ed8",
+            background: isRead ? "#f0fdf4" : "#eff6ff",
+            fontWeight: 500,
+            "&:hover": {
+              background: isRead ? "#f0fdf4" : "#dbeafe",
+            }
           }}
         >
-          Mark as Read
+          {isRead ? "Read" : "Mark as Read"}
         </Typography>
 
         {/* VIEW */}

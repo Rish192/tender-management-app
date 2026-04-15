@@ -19,8 +19,6 @@ import { getTenderCBAAPI, getTenderCBADetailAPI, sendForCheckingAPI } from "../.
 import { useUI } from "../../store/uiStore";
 import { useNavigate } from "react-router-dom";
 
-const bidders = ["Bidder Name 1", "Bidder Name 2", "Bidder Name 3", "Bidder Name 4", "Bidder Name 5", "Bidder Name 6"];
-
 const CBACell = ({ tenderId, bidId, property, openPreview }) => {
   const [value, setValue] = useState("Loading...");
   const [cellData, setCellData] = useState(null);
@@ -97,7 +95,7 @@ const CBATab = () => {
       const data = await getTenderCBAAPI(id);
       if (Array.isArray(data)) {
         setBidders(data.map(item => ({
-          bidderName: item.vendor_name || "Unknown",
+          bidderName: item.vendor_name.charAt(0).toUpperCase() + item.vendor_name.slice(1),
           bidId: item.bid_id
         })));
       }
@@ -168,13 +166,12 @@ const CBATab = () => {
         boxShadow: "0 4px 10px rgba(0,0,0,0.05)"
       }}>
         <Box sx={{ minWidth: "max-content" }}>
-
-          <Box display="flex" sx={{ background: "#eef2f7", borderBottom: "1px solid #e5e7eb" }}>
-      
+          <Box display="flex" sx={{ background: "#eef2f7", borderBottom: "1px solid #e5e7eb", fontSize: 13, top: 0 }}>
             <Box
               flex={0.5}
               minWidth={100}
-              p={2}
+              px={2}
+              py={1.5}
               fontWeight={500}
               sx={{
                 position: 'sticky',
@@ -188,7 +185,7 @@ const CBATab = () => {
             </Box>
 
             {bidders.map((bidder) => (
-              <Box key={bidder.bidId} flex={1} minWidth={160} p={1}>
+              <Box key={bidder.bidId} flex={1} minWidth={160} px={2} py={1.5}>
                 <Select fullWidth size="small" defaultValue="Acceptable" sx={{ background: "#fff" }}>
                   <MenuItem value="Acceptable">Acceptable</MenuItem>
                   <MenuItem value="Non Acceptable">Non Acceptable</MenuItem>

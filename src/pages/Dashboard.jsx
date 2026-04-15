@@ -21,11 +21,11 @@ import { getTenderListAPI } from "../api/tenderApi";
 
 const Dashboard = () => {
   const { setUploadOpen, setSearchOpen } = useUI();
-  const { setTenders } = useTenderStore();
+  const { setTenders, updateTender } = useTenderStore();
 
 
 
-   useEffect(() => {
+  useEffect(() => {
     const loadTenders = async () => {
       try {
         const data = await getTenderListAPI();
@@ -40,8 +40,20 @@ const Dashboard = () => {
     const interval = setInterval(() => {
       loadTenders();
     }, 10000);
-    return () => clearInterval(interval);
-  }, [setTenders]);
+
+    const handleTenderUpdate = (e) => {
+      if (e.detail?.tender_id && e.detail?.status) {
+        updateTender(e.detail.tender_id, { tender_status: e.detail.status });
+      }
+      loadTenders();
+    };
+    window.addEventListener("tenderStatusUpdate", handleTenderUpdate);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("tenderStatusUpdate", handleTenderUpdate);
+    };
+  }, [setTenders, updateTender]);
 
   return (
     <Box display="flex" height="100vh" overflow="hidden">

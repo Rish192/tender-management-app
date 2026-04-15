@@ -29,13 +29,13 @@ const TenderOverview = () => {
           
           {/* LEFT SIDE */}
           <Box>
-            <Typography fontSize={22} fontWeight={600}>
+            <Typography fontSize={22} fontWeight={600} mb={1}>
               Dashboard - Tender Details
             </Typography>
 
-            <Typography mt={0.5} color="#666" fontSize={14}>
-              {tender?.name || "Tender not found"}
-            </Typography>
+            {/* <Typography mt={0.5} color="#666" fontSize={14}>
+              {tender?.tender_name || "Tender not found"}
+            </Typography> */}
           </Box>
 
           {/* RIGHT SIDE TABS */}
