@@ -177,39 +177,39 @@ const EditTenderModal = () => {
 
   // ================= SAVE DRAFT =================
   const handleSaveDraft = async () => {
-  if (!tenderId) {
-    showNotification("Tender ID missing");
-    return;
-  }
+    if (!tenderId) {
+      showNotification("Tender ID missing");
+      return;
+    }
 
-  try {
-    const payload = {
-      tender_status: "Saved Draft",
-      tender_details: {
-        ...formData,
-        domain: rows.reduce((acc, r) => {
-          if (r.industry) {
-            if (r.s1) acc.push({ industry: r.industry, sector: r.s1 });
-            if (r.s2) acc.push({ industry: r.industry, sector: r.s2 });
-          }
-          return acc;
-        }, []),
-      },
-    };
+    try {
+      const payload = {
+        tender_status: "Saved Draft",
+        tender_details: {
+          ...formData,
+          domain: rows.reduce((acc, r) => {
+            if (r.industry) {
+              if (r.s1) acc.push({ industry: r.industry, sector: r.s1 });
+              if (r.s2) acc.push({ industry: r.industry, sector: r.s2 });
+            }
+            return acc;
+          }, []),
+        },
+      };
 
-    const res = await updateTenderAPI(tenderId, payload);
+      const res = await updateTenderAPI(tenderId, payload);
 
-    if (!res) throw new Error("Update failed");
+      if (!res) throw new Error("Update failed");
 
-    updateTender(tenderId, payload);
+      updateTender(tenderId, payload);
 
-    showNotification("Draft saved successfully");
-    setEditOpen(false);
-  } catch (err) {
-    console.error("SAVE ERROR:", err);
-    showNotification("Failed to save draft");
-  }
-};
+      showNotification("Draft saved successfully");
+      setEditOpen(false);
+    } catch (err) {
+      console.error("SAVE ERROR:", err);
+      showNotification("Failed to save draft");
+    }
+  };
 
   // ================= FINAL SUBMIT =================
   const handleSubmit = async () => {

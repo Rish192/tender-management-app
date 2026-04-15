@@ -1,7 +1,7 @@
 // src/store/uiStore.jsx
 
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
-import { getNotificationsAPI, markNotificationAsReadAPI } from "../api/tenderApi";
+import { getNotificationsAPI, markNotificationAsReadAPI, updateTenderAPI } from "../api/tenderApi";
 import NotificationPanel from './../components/common/NotificationPanel';
 
 const UIContext = createContext();
@@ -44,51 +44,32 @@ export const UIProvider = ({ children }) => {
   const refreshPanelNotifications = useCallback(async () => {
     const data = await getNotificationsAPI();
     if (Array.isArray(data)) {
-      data.forEach(newNotif => {
+      for (const newNotif of data) {
         const hasbeenShown = shownNotificationsRef.current.has(newNotif.notification_id);
 
         if (newNotif.status === "UNREAD" && !hasbeenShown) {
           if (newNotif.message && newNotif.message.includes("RFP Extraction completed")) {
             showNotification("Document extracted successfully");
             shownNotificationsRef.current.add(newNotif.notification_id);
-          } else if (newNotif.message && newNotif.message.includes("CBA Analysis is completed")) {
-            showNotification("CBA Analysis is completed");
-            shownNotificationsRef.current.add(newNotif.notification_id);
+          } 
+          else if (newNotif.message && newNotif.message.includes("CBA Analysis is completed")) {
             if (newNotif.tender_id) {
-              window.dispatchEvent(new CustomEvent("tenderStatusUpdate", {
-                detail: { tender_id: newNotif.tender_id, status: "CBA Completed" }
-              }));
+              try {
+                const payload = { tender_status: "CBA Completed" };
+                await updateTenderAPI(newNotif.tender_id, payload);
+              } catch (err) {
+                console.error("Failed to update tender status: ", err);
+              }
             }
           }
         }
-      });
+      };
 
       setPanelNotifications(data);
       const unread = data.filter(n => n.status !== "READ").length;
       setNotificationCount(unread);
     }
   }, [showNotification]);
-
-  // const markAllAsRead = async () => {
-  //   const unreadIds = panelNotifications
-  //     .filter((n) => n.status !== "READ")
-  //     .map((n) => n.notification_id);
-
-  //   if (unreadIds.length === 0) return;
-
-  //   try {
-  //     await Promise.all(unreadIds.map((id) => markNotificationAsReadAPI(id)));
-  //     await refreshPanelNotifications();
-  //   } catch (err) {
-  //     console.error("Failed to mark notifications as read: ", err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (notificationPanelOpen) {
-  //     markAllAsRead();
-  //   }
-  // }, [notificationPanelOpen]);
 
   const markAsRead = async (notificationId) => {
     try {
@@ -151,5 +132,4 @@ export const UIProvider = ({ children }) => {
   );
 };
 
-// ✅ CUSTOM HOOK
 export const useUI = () => useContext(UIContext);

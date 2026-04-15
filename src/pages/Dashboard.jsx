@@ -41,17 +41,8 @@ const Dashboard = () => {
       loadTenders();
     }, 10000);
 
-    const handleTenderUpdate = (e) => {
-      if (e.detail?.tender_id && e.detail?.status) {
-        updateTender(e.detail.tender_id, { tender_status: e.detail.status });
-      }
-      loadTenders();
-    };
-    window.addEventListener("tenderStatusUpdate", handleTenderUpdate);
-
     return () => {
       clearInterval(interval);
-      window.removeEventListener("tenderStatusUpdate", handleTenderUpdate);
     };
   }, [setTenders, updateTender]);
 
