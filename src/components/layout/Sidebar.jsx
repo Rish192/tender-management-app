@@ -27,11 +27,11 @@ const Sidebar = () => {
     return (
       <Box
         onClick={onClick}
-        display="flex"
-        alignItems="center"
-        px={2}
-        py={1.3}
         sx={{
+          display: 'flex',
+          alignItems: 'center',
+          px: '0.8333vw',
+          py: '0.625vw',
           cursor: "pointer",
           borderRadius: 2,
           position: "relative",
@@ -42,21 +42,21 @@ const Sidebar = () => {
         }}
       >
         {/* ICON */}
-        <Box position="relative" minWidth={24}>
-          <Icon sx={{ color: "#fff" }} />
+        <Box position="relative" sx={{  }}>
+          <Icon sx={{ color: "#fff", width: '1.5vw', height: '1.5vw' }} />
 
           {/* 🔴 BADGE (Collapsed) */}
           {!expanded && badge > 0 && (
             <Box
               sx={{
                 position: "absolute",
-                top: -6,
-                right: -6,
+                top: '-0.4167vw',
+                right: '-0.4167vw',
                 background: "red",
                 color: "#fff",
-                fontSize: 10,
-                minWidth: 16,
-                height: 16,
+                fontSize: '0.625vw',
+                width: '0.9375vw',
+                height: '0.9375vw',
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -71,7 +71,7 @@ const Sidebar = () => {
         {/* TEXT */}
         <Box
           sx={{
-            ml: 2,
+            ml: '0.8333vw',
             whiteSpace: "nowrap",
             opacity: expanded ? 1 : 0,
             transform: expanded ? "translateX(0)" : "translateX(-10px)",
@@ -80,7 +80,7 @@ const Sidebar = () => {
             overflow: "hidden",
           }}
         >
-          <Typography fontSize={14}>{label}</Typography>
+          <Typography sx={{fontSize: '0.9375vw'}}> {label} </Typography>
         </Box>
 
         {/* 🔴 BADGE (Expanded) */}
@@ -90,8 +90,9 @@ const Sidebar = () => {
               ml: "auto",
               background: "red",
               color: "#fff",
-              fontSize: 11,
-              px: 1,
+              fontSize: '0.625vw',
+              px: '0.5vw',
+              py: '0.1vw',
               borderRadius: 2,
             }}
           >
@@ -107,7 +108,7 @@ const Sidebar = () => {
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
       sx={{
-        width: expanded ? 240 : 70,
+        width: expanded ? '14.583vw' : '4.6875vw',
         transition: `width ${animationDuration} cubic-bezier(0.4, 0, 0.2, 1)`,
         height: "100vh",
         display: "flex",
@@ -115,17 +116,17 @@ const Sidebar = () => {
         justifyContent: "space-between",
         background: "linear-gradient(180deg, #1f3a93, #2f4db5)",
         color: "#fff",
-        p: 1.5,
+        p: '0.6250vw',
       }}
     >
       {/* ================= TOP ================= */}
       <Box>
         {/* PROFILE */}
-        <Box textAlign="center" mb={2}>
+        <Box textAlign="center" mb={'0.8333vw'}>
           <Box
             sx={{
-              width: expanded ? 70 : 40,
-              height: expanded ? 70 : 40,
+              width: expanded ? '3.9063vw' : '2.2917vw',
+              height: expanded ? '3.9063vw' : '2.2917vw',
               borderRadius: "50%",
               background: "#fff",
               margin: "auto",
@@ -141,14 +142,14 @@ const Sidebar = () => {
               transition: "all 0.3s ease",
             }}
           >
-            <Typography mt={1} fontSize={14} fontWeight={500}>
-              Spandan Borgohain
+            <Typography mt={'0.4167vw'} fontSize={'0.8333vw'} fontWeight={500}>
+              John Doe
             </Typography>
-            <Typography fontSize={11} opacity={0.8}>
+            <Typography fontSize={'0.7292vw'}>
               Tender Officer
             </Typography>
 
-            <Box mt={2} sx={{ height: 1, background: "rgba(255,255,255,0.2)" }} />
+            <Box mt={'0.8333vw'} sx={{ height: '0.0521vw', background: "rgba(255,255,255,1)" }} />
           </Box>
         </Box>
 
@@ -157,7 +158,7 @@ const Sidebar = () => {
           sx={{
             background: expanded ? "rgba(255,255,255,0.08)" : "transparent",
             borderRadius: 3,
-            py: 1,
+            py: '0.4167vw',
           }}
         >
           {menuItem(DashboardIcon, "Dashboard", {
@@ -180,7 +181,7 @@ const Sidebar = () => {
           sx={{
             background: expanded ? "rgba(255,255,255,0.08)" : "transparent",
             borderRadius: 3,
-            py: 1,
+            py: '0.4167vw',
           }}
         >
           {menuItem(InfoOutlinedIcon, "Quick Guide")}
@@ -190,44 +191,15 @@ const Sidebar = () => {
 
         {/* LOGOUT */}
         <Box
-          mt={2}
+          mt={'0.8333vw'}
           sx={{
             background: "rgba(255,255,255,0.15)",
             borderRadius: 2,
-            py: 1.2,
-            cursor: "pointer",
-            "&:hover": {
-              background: "rgba(255,255,255,0.25)",
-            },
           }}
         >
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent={expanded ? "flex-start" : "center"}
-            px={2}
-            gap={1}
-          >
-            <LogoutIcon fontSize="small" />
-
-            <Box
-              sx={{
-                opacity: expanded ? 1 : 0,
-                width: expanded ? "auto" : 0,
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-              }}
-            >
-              <Typography 
-                fontSize={13}
-                onClick={() => {
-                  navigate("/");
-                }}  
-              >
-                Logout
-              </Typography>
-            </Box>
-          </Box>
+          {menuItem(LogoutIcon, "Logout", {
+            onClick: () => navigate("/"),
+          })}
         </Box>
       </Box>
     </Box>
