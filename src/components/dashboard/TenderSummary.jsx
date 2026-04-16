@@ -27,17 +27,17 @@ const TenderSummary = () => {
 
   const totalTenders = tenders?.length || 0;
   return (
-    <Box width={420}>
+    <Box sx={{width: '50vw'}}>
       {/* TITLE */}
-      <Typography fontWeight={600}>Tender Summary</Typography>
+      <Typography sx={{fontSize: '1.0417vw', fontWeight: 600}}>Tender Summary</Typography>
 
-      <Box sx={{ height: 1, background: colors.line, my: 1 }} />
+      <Box sx={{ height: '0.4167vw',my: '0.4167vw' }} />
 
       {/* CONTENT */}
-      <Box display="flex" alignItems="center" gap={3}>
+      <Box display="flex" alignItems="center" gap={'1.667vw'}>
         {/* DONUT CHART */}
         <Box position="relative">
-          <PieChart width={180} height={180}>
+          <PieChart width={'10.417vw'} height={'10.417vw'}>
             <Pie
               data={summaryData}
               innerRadius={60}
@@ -60,10 +60,10 @@ const TenderSummary = () => {
             sx={{ transform: "translate(-50%, -50%)" }}
             textAlign="center"
           >
-            <Typography fontSize={12} color={colors.textSecondary}>
+            <Typography fontSize={'0.625vw'} color={colors.textSecondary}>
               TOTAL TENDERS
             </Typography>
-            <Typography fontWeight={700} fontSize={18}>
+            <Typography fontWeight={700} fontSize={'0.9375vw'}>
               {totalTenders}
             </Typography>
           </Box>
@@ -72,24 +72,17 @@ const TenderSummary = () => {
         {/* LEGEND */}
         <Box>
           {summaryData.map((item, i) => (
-            <Box key={i} display="flex" alignItems="center" gap={1} mb={1}>
+            <Box key={i} display="flex" alignItems="center" gap={'0.8333vw'} mb={'0.625vw'}>
               <Box
                 sx={{
-                  width: 8,
-                  height: 8,
+                  width: '0.5208vw',
+                  height: '0.5208vw',
                   borderRadius: "50%",
                   background: item.color,
                 }}
               />
-              <Typography fontSize={13}>
+              <Typography fontSize={'0.8333vw'}>
                 {item.value} - {item.label}
-                {/* {item.name === "Issued"
-                  ? "Tenders Issued"
-                  : item.name === "In Progress"
-                  ? "Evaluation in Progress"
-                  : item.name === "Completed"
-                  ? "Evaluation Completed"
-                  : "Tender Awarded"} */}
               </Typography>
             </Box>
           ))}

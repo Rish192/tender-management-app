@@ -5,22 +5,22 @@ import { colors } from "../../styles/theme";
 
 const TopPriorityTenders = () => {
   return (
-    <Box flex={1}>
+    <Box sx={{width: '50vw'}}>
       {/* TITLE */}
-      <Typography fontWeight={600}>Top Priority Tenders</Typography>
+      <Typography sx={{fontSize: '1.0417vw', fontWeight: 600}}>Top Priority Tenders</Typography>
 
-      <Box sx={{ height: 1, background: colors.line, my: 1 }} />
+      <Box sx={{ height: '0.4167vw',my: '0.4167vw' }} />
 
       {/* CARDS */}
-      <Box display="flex" gap={3}>
+      <Box display="flex" gap={'1.667vw'} sx={{width: '100%', overflow: 'hidden'}}>
         {[1, 2, 3].map((_, i) => (
           <Box
             key={i}
             sx={{
-              width: 200,
+              flex: '1',
               background: "#eef2f7",
               borderRadius: 3,
-              p: 2,
+              p: '0.8333vw',
               boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
             }}
           >
@@ -29,26 +29,26 @@ const TopPriorityTenders = () => {
               sx={{
                 background: "#2F4DB5",
                 color: "#fff",
-                px: 1.5,
-                py: 0.5,
+                px: '0.625vw',
+                py: '0.4167vw',
                 borderRadius: 1,
-                fontSize: 12,
-                mb: 1,
+                fontSize: '0.625vw',
+                mb: '0.4167vw',
               }}
             >
               #BID564654
             </Box>
 
             {/* CONTENT */}
-            <Typography fontSize={13}>
+            <Typography fontSize={'0.7292vw'}>
               <b>Subject</b> &nbsp; This is Subject
             </Typography>
 
-            <Typography fontSize={13}>
+            <Typography fontSize={'0.7292vw'}>
               <b>TAT</b> &nbsp; 5 Days
             </Typography>
 
-            <Typography fontSize={13}>
+            <Typography fontSize={'0.7292vw'}>
               <b>Validity</b> &nbsp; 3 Days
             </Typography>
 
@@ -56,11 +56,11 @@ const TopPriorityTenders = () => {
             <Button
               fullWidth
               sx={{
-                mt: 1.5,
+                mt: '0.625vw',
                 background: "#2F4DB5",
                 color: "#fff",
                 textTransform: "none",
-                fontSize: 12,
+                fontSize: '0.7292vw',
               }}
             >
               View Tender

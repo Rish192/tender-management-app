@@ -29,7 +29,7 @@ const Dashboard = () => {
     const loadTenders = async () => {
       try {
         const data = await getTenderListAPI();
-        setTenders(data || []); // ✅ correct usage
+        setTenders(data || []);
       } catch (err) {
         console.error("Failed to Fetch:", err);
       }
@@ -51,12 +51,20 @@ const Dashboard = () => {
       <Sidebar />
 
       {/* MAIN CONTENT */}
-      <Box flex={1} bgcolor={colors.background} overflow="auto">
-        <Box maxWidth="1200px" mx="auto" px={3} py={3}>
+      <Box flex={1} bgcolor={colors.background} 
+      sx={{
+        overflow: 'auto',
+        scrollbarWidth: 'thin',
+        '&::-webkit-scrollbar': { width: '0.2083vw' },
+        '&::-webkit-scrollbar-track': { background: 'transparent' },
+        '&::-webkit-scrollbar-thumb': { borderRadius: '3px' },
+        scrollbarColor: '#5fb2e2ff transparent'
+      }}>
+        <Box px={'2.5vw'} py={'1.5vw'}>
 
           {/* HEADER */}
-          <Box display="flex" justifyContent="space-between" mb={3}>
-            <Typography fontSize={22} fontWeight={600}>
+          <Box display="flex" justifyContent="space-between" mb={'1.25vw'}>
+            <Typography fontSize={'1.25vw'} fontWeight={600}>
               Dashboard - Quick Overview
             </Typography>
 
@@ -66,21 +74,23 @@ const Dashboard = () => {
                 background: colors.primary,
                 color: "#fff",
                 textTransform: "none",
-                px: 3,
+                px: '1.25vw',
               }}
             >
-              Add Tender +
+              <Typography sx={{fontSize: '0.9375vw'}}>
+                Add Tender +
+              </Typography>
             </Button>
           </Box>
 
           {/* TOP SECTION */}
-          <Box display="flex" gap={4} alignItems="center" mb={4}>
+          <Box display="flex" gap={'1.6667vw'} alignItems="center">
             <TenderSummary />
 
             <Box
               sx={{
                 width: "1px",
-                height: 180,
+                height: '12.5vw',
                 background: colors.line,
               }}
             />
@@ -89,9 +99,9 @@ const Dashboard = () => {
           </Box>
 
           {/* TENDER LIST */}
-          <Box mt={5}>
-            <Box display="flex" justifyContent="space-between">
-              <Typography fontWeight={600}>Tender List</Typography>
+          <Box sx={{mt: '2.0833vw', display: 'flex', flexDirection: 'column', gap: '0.8333vw'}}>
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+              <Typography sx={{fontSize: '1.0417vw', fontWeight: 600}}>Tender List</Typography>
 
               {/* SEARCH CAPSULE */}
               <Box
@@ -101,9 +111,9 @@ const Dashboard = () => {
                   alignItems: "center",
                   background: "#f5f6fa",
                   borderRadius: "12px",
-                  px: 2,
-                  py: 0.8,
-                  width: 280,
+                  px: '0.8333vw',
+                  py: '0.4167vw',
+                  width: '15.625vw',
                   cursor: "pointer",
                   boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
                   transition: "0.2s",
@@ -114,7 +124,7 @@ const Dashboard = () => {
               >
                 <SearchIcon
                   sx={{
-                    fontSize: 18,
+                    fontSize: '0.9375vw',
                     color: "#6b7280",
                   }}
                 />
@@ -123,7 +133,7 @@ const Dashboard = () => {
                   placeholder="Search By Tender No. / Subject"
                   sx={{
                     ml: 1,
-                    fontSize: 13,
+                    fontSize: '0.7292vw',
                     color: "#555",
                     width: "100%",
                     cursor: "pointer",
@@ -136,8 +146,6 @@ const Dashboard = () => {
                 />
               </Box>
             </Box>
-
-            <Box sx={{ height: 1, background: colors.line, my: 1 }} />
 
             <TenderTable />
           </Box>
