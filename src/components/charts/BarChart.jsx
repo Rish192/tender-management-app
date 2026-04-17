@@ -14,17 +14,17 @@ const BarChart = ({ title }) => {
         sx={{
           flex: 1,
           cursor: "pointer",
-          px: 2,
+          px: '0.8333vw',
         }}
       >
         {/* GRAPH AREA */}
         <Box
           sx={{
-            height: 180,
+            //height: '25.926vh',
             position: "relative",
             display: "flex",
             alignItems: "flex-end",
-            gap: 2,
+            gap: '1.0417vw',
           }}
         >
           {/* RED THRESHOLD LINE */}
@@ -44,10 +44,10 @@ const BarChart = ({ title }) => {
             <Box
               key={i}
               sx={{
-                width: 30,
-                height: d / 3,
+                width: "3vw",
+                height: `${d / 15}vh`,
                 background: "linear-gradient(#3b82f6, #1d4ed8)",
-                borderRadius: "6px",
+                borderRadius: '0.3125vw',
               }}
             />
           ))}
@@ -56,8 +56,8 @@ const BarChart = ({ title }) => {
         {/* X LABEL */}
         <Typography
           textAlign="center"
-          mt={1}
-          fontSize={12}
+          mt={'0.8333vw'}
+          fontSize={'0.7292vw'}
           color="#6b7280"
         >
           Bidder Name
@@ -66,8 +66,8 @@ const BarChart = ({ title }) => {
         {/* TITLE */}
         <Typography
           textAlign="center"
-          mt={1}
-          fontSize={14}
+          mt={'0.4167vw'}
+          fontSize={'0.9375vw'}
           fontWeight={600}
           color="#1e3a8a"
         >

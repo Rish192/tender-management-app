@@ -12,8 +12,8 @@ const ChartModal = ({ open, onClose, title }) => {
           height: "80vh",
           background: "#eef2f7",
           borderRadius: "20px",
-          p: 4,
-          margin: "40px auto",
+          p: '1.667vw',
+          margin: "5.0926vh auto",
           position: "relative",
           boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
         }}
@@ -23,39 +23,39 @@ const ChartModal = ({ open, onClose, title }) => {
           onClick={onClose}
           sx={{
             position: "absolute",
-            top: -15,
-            right: -15,
+            top: '-0.8333vw',
+            right: '-0.8333vw',
             background: "#ef4444",
             color: "#fff",
-            width: 36,
-            height: 36,
+            width: '1.8750vw',
+            height: '1.8750vw',
             "&:hover": { background: "#dc2626" },
           }}
         >
-          <CloseIcon />
+          <CloseIcon sx={{fontSize: '1.25vw'}}/>
         </IconButton>
 
         {/* TITLE */}
-        <Typography
-          fontSize={18}
-          fontWeight={600}
-          color="#1e3a8a"
-          mb={2}
-        >
+        <Typography sx={{
+          fontSize: '0.9375vw',
+          fontWeight: 600,
+          color: "#1e3a8a",
+          mb: '0.8333vw',
+        }}>
           {title}
         </Typography>
 
         {/* GRAPH AREA */}
         <Box
           sx={{
-            height: "60%",
+            height: "70%",
             display: "flex",
             alignItems: "flex-end",
-            gap: 3,
+            gap: '1.25vw',
             borderLeft: "2px solid #9ca3af",
             borderBottom: "2px solid #9ca3af",
-            pl: 2,
-            pb: 2,
+            pl: '0.8333vw',
+            pb: '0.8333vw',
             position: "relative",
             overflowX: "auto",
           }}
@@ -66,7 +66,7 @@ const ChartModal = ({ open, onClose, title }) => {
               key={i}
               sx={{
                 position: "absolute",
-                bottom: y / 2,
+                bottom: `${y / 15}vh`,
                 left: 0,
                 right: 0,
                 borderTop: "1px dashed #9ca3af",
@@ -79,7 +79,7 @@ const ChartModal = ({ open, onClose, title }) => {
           <Box
             sx={{
               position: "absolute",
-              bottom: 200,
+              bottom: '10.417vw',
               left: 0,
               right: 0,
               borderTop: "2px dashed red",
@@ -91,14 +91,14 @@ const ChartModal = ({ open, onClose, title }) => {
             <Box key={i} textAlign="center">
               <Box
                 sx={{
-                  width: 28,
-                  height: d / 2,
+                  width: '1.5625vw',
+                  height: `${d / 15}vh`,
                   background:
                     "linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%)",
                   borderRadius: "6px",
                 }}
               />
-              <Typography fontSize={10} mt={1}>
+              <Typography fontSize={'0.625vw'} mt={'0.4167vw'}>
                 Bidder {i + 1}
               </Typography>
             </Box>
@@ -106,7 +106,7 @@ const ChartModal = ({ open, onClose, title }) => {
         </Box>
 
         {/* SCROLL INDICATOR */}
-        <Box
+        {/* <Box
           mt={3}
           sx={{
             height: 6,
@@ -123,14 +123,14 @@ const ChartModal = ({ open, onClose, title }) => {
               borderRadius: 10,
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* X LABEL */}
         <Typography
           textAlign="center"
-          mt={2}
+          mt={'0.8333vw'}
           color="#6b7280"
-          fontSize={13}
+          fontSize={'0.8333vw'}
         >
           Bidder Name
         </Typography>

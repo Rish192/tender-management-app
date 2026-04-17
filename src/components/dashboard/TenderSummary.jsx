@@ -40,8 +40,8 @@ const TenderSummary = () => {
           <PieChart width={'10.417vw'} height={'10.417vw'}>
             <Pie
               data={summaryData}
-              innerRadius={60}
-              outerRadius={80}
+              innerRadius={50}
+              outerRadius={70}
               dataKey="value"
               stroke="none"
               isAnimationActive={true}

@@ -23,8 +23,6 @@ const Dashboard = () => {
   const { setUploadOpen, setSearchOpen } = useUI();
   const { setTenders, updateTender } = useTenderStore();
 
-
-
   useEffect(() => {
     const loadTenders = async () => {
       try {
@@ -132,7 +130,7 @@ const Dashboard = () => {
                 <InputBase
                   placeholder="Search By Tender No. / Subject"
                   sx={{
-                    ml: 1,
+                    ml: '0.4167vw',
                     fontSize: '0.7292vw',
                     color: "#555",
                     width: "100%",

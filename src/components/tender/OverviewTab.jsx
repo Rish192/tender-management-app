@@ -68,16 +68,16 @@ const OverviewTab = ({ tender }) => {
   };
   
   return (
-    <Box>
+    <Box sx={{height: '100%', display: 'flex', flexDirection: 'column', gap: '2.0833vw' }}>
 
       {/* ================= TOP ================= */}
-      <Box display="flex" gap={4}>
+      <Box display="flex" gap={'1.667vw'}>
 
         {/* LEFT */}
         <Box flex={1}>
           <SectionTitle title="CBA Status" />
 
-          <Box display="flex" alignItems="center" gap={4} mt={2}>
+          <Box display="flex" alignItems="center" gap={'1.667vw'} mt={'0.8333vw'}>
             <PieChart totalBidders={biddersCount}/>
 
             {/* LEGENDS */}
@@ -93,7 +93,7 @@ const OverviewTab = ({ tender }) => {
         <Box flex={1.5}>
           <SectionTitle title="Tender Overview" />
 
-          <Box display="grid" gridTemplateColumns="repeat(3,1fr)" gap={2} mt={2}>
+          <Box display="grid" gridTemplateColumns="repeat(3,1fr)" gap={'0.8333vw'} mt={'0.8333vw'}>
             <Card label="Tender Number" value={tenderDetails?.tender_number || ""} />
             <Card label="Bid Opening Date" value={tenderDetails?.bid_opening_date || ""} />
             <Card label="Bid Due Date" value={tenderDetails?.bid_due_date || ""} />
@@ -104,34 +104,30 @@ const OverviewTab = ({ tender }) => {
         </Box>
       </Box>
 
-     {/* ================= BOTTOM ================= */}
-    <Box mt={5}>
-    <SectionTitle title="Tender Status" />
+      {/* ================= BOTTOM ================= */}
+      <Box sx={{flex: 1}}>
+      <SectionTitle title="Tender Status" />
 
-    <Box
-        mt={2}
-        sx={{
-        background: "#eef2f7",
-        borderRadius: "16px",
-        p: 3,
-        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-        }}
-    >
-        <Box display="flex" alignItems="stretch">
+      <Box
+          mt={'0.8333vw'}
+          sx={{
+          background: "#eef2f7",
+          borderRadius: "16px",
+          p: '1.25vw',
+          boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+          }}
+      >
+          <Box display="flex" alignItems="stretch">
+            <BarChart title="Net Worth Status" />
+            <Divider />
 
-        <BarChart title="Net Worth Status" />
+            <BarChart title="Average Annual Turnover Status" />
+            <Divider />
 
-        <Divider />
-
-        <BarChart title="Average Annual Turnover Status" />
-
-        <Divider />
-
-        <BarChart title="Working Capital Status" />
-
-        </Box>
-    </Box>
-    </Box>
+            <BarChart title="Working Capital Status" />
+          </Box>
+      </Box>
+      </Box>
     </Box>
   );
 };
@@ -143,13 +139,13 @@ export default OverviewTab;
 
 const SectionTitle = ({ title }) => (
   <Box>
-    <Typography fontWeight={600} fontSize={16} color="#1f3a8a">
+    <Typography fontWeight={600} fontSize={'0.9375vw'} color="#1f3a8a">
       {title}
     </Typography>
     <Box
-      mt={0.5}
+      mt={'0.2083vw'}
       sx={{
-        height: 2,
+        height: '0.1042vw',
         width: "60%",
         background: "#cbd5e1",
       }}
@@ -162,15 +158,15 @@ const Card = ({ label, value }) => (
     sx={{
       background: "#ffffff",
       borderRadius: 3,
-      p: 2,
+      p: '0.8333vw',
       boxShadow: "0 6px 18px rgba(0,0,0,0.1)",
     }}
   >
-    <Typography fontSize={12} color="#6b7280">
+    <Typography fontSize={'0.625vw'} color="#6b7280">
       {label}
     </Typography>
 
-    <Typography fontSize={20} fontWeight={600} mt={0.5} color="#1e3a8a">
+    <Typography fontSize={'1.0417vw'} fontWeight={600} mt={'0.2083vw'} color="#1e3a8a">
       {value}
     </Typography>
   </Box>
@@ -179,9 +175,9 @@ const Card = ({ label, value }) => (
 const Divider = () => (
   <Box
     sx={{
-      width: "1px",
+      width: '0.1042vw',
       background: "#d1d5db",
-      mx: 2,
+      mx: '0.8333vw',
     }}
   />
 );
@@ -190,23 +186,23 @@ const Legend = ({ color, label }) => (
   <Box
     display="flex"
     alignItems="center"
-    gap={1}
+    gap={'0.4167vw'}
     sx={{
       background: "#ffffff",
-      px: 2,
-      py: 1,
+      px: '0.8333vw',
+      py: '0.4167vw',
       borderRadius: 2,
       boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
     }}
   >
     <Box
       sx={{
-        width: 10,
-        height: 10,
+        width: '0.625vw',
+        height: '0.625vw',
         background: color,
         borderRadius: 1,
       }}
     />
-    <Typography fontSize={12}>{label}</Typography>
+    <Typography fontSize={'0.7292vw'}>{label}</Typography>
   </Box>
 );

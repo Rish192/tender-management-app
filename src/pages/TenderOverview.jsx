@@ -18,18 +18,26 @@ const TenderOverview = () => {
   const tender = tenders?.find((t) => String(t.tender_id) === id);
 
   return (
-    <Box display="flex" height="100vh">
+    <Box display="flex" height="100vh" overflow="hidden">
       <Sidebar />
 
       {/* ✅ MAIN CONTENT WRAPPER (IMPORTANT) */}
-      <Box flex={1} p={3} pt={2} bgcolor={colors.background} minWidth={0}>
+      <Box p={'1.25vw'} pt={'0.8333vw'} bgcolor={colors.background} minWidth={0} 
+        sx={{display: 'flex', flex: 1, flexDirection: 'column',
+          overflow: 'auto',
+          scrollbarWidth: 'thin',
+          '&::-webkit-scrollbar': { width: '0.2083vw' },
+          '&::-webkit-scrollbar-track': { background: 'transparent' },
+          '&::-webkit-scrollbar-thumb': { borderRadius: '3px' },
+          scrollbarColor: '#5fb2e2ff transparent'
+      }}>
 
         {/* ✅ HEADER + TABS (SAME ROW) */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
           
           {/* LEFT SIDE */}
           <Box>
-            <Typography fontSize={22} fontWeight={600} mb={1}>
+            <Typography fontSize={'1.25vw'} fontWeight={600}>
               Dashboard - Tender Details
             </Typography>
 
@@ -44,8 +52,8 @@ const TenderOverview = () => {
               background: "#e5e7eb",
               borderRadius: "12px",
               display: "inline-flex",
-              p: "4px",
-              gap: "4px",
+              p: "0.2083vw",
+              gap: "0.2083vw",
             }}
           >
             <TabButton
@@ -70,7 +78,7 @@ const TenderOverview = () => {
         </Box>
 
         {/* TAB CONTENT */}
-        <Box mt={3}>
+        <Box mt={'1.25vw'} sx={{flex: 1}}>
           {tab === "overview" && <OverviewTab tender={tender} />}
           {tab === "cba" && <CBATab />}
           {tab === "cs" && <ComparativeTab />}
@@ -94,13 +102,13 @@ const TabButton = ({ active, label, onClick }) => {
     <Box
       onClick={onClick}
       sx={{
-        px: 2.5,
-        py: 1,
+        px: '1.25vw',
+        py: '0.4167vw',
         borderRadius: "8px",
         cursor: "pointer",
         background: active ? "#2F4DB5" : "transparent",
         color: active ? "#fff" : "#1e3a8a",
-        fontSize: "13px",
+        fontSize: "0.8333vw",
         fontWeight: 500,
         transition: "0.2s",
         whiteSpace: "nowrap",
