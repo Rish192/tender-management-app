@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 
 const PageWrapper = ({ children }) => {
   return (
-    <Box p={3} width="100%">
+    <Box p={'1.25vw'} width="100%">
       {children}
     </Box>
   );

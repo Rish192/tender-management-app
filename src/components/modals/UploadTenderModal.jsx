@@ -91,9 +91,9 @@ const UploadTenderModal = () => {
     }}>
       <Box
         sx={{
-          width: 480,
+          width: '30.208vw',
           background: "#f5f7fb",
-          p: 3,
+          p: '1.25vw',
           borderRadius: 3,
           margin: "120px auto",
           boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
@@ -115,13 +115,13 @@ const UploadTenderModal = () => {
               zIndex: 10,
               backdropFilter: "blur(2px)"
           }}>
-              <CircularProgress size={50} sx={{ color: "#2563eb" }} />
-              <Typography mt={2} fontWeight={500} color="#2563eb">
+              <CircularProgress size={'2.6042vw'} sx={{ color: "#2563eb" }} />
+              <Typography mt={'0.8333vw'} fontSize={'0.8333vw'} fontWeight={500} color="#2563eb">
                 Uploading Tender...
               </Typography>
           </Box>
         )}
-        <Typography fontWeight={600} mb={2}>
+        <Typography fontSize={'0.9375vw'} fontWeight={600} mb={'0.8333vw'}>
           Upload file
         </Typography>
 
@@ -133,7 +133,7 @@ const UploadTenderModal = () => {
           sx={{
             border: dragActive ? "2px solid #2563eb" : "2px dashed #3b82f6",
             borderRadius: 2,
-            height: 160,
+            height: '10.417vw',
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -143,9 +143,9 @@ const UploadTenderModal = () => {
             transition: "all 0.2s ease-in-out",
           }}
         >
-          <CloudUploadIcon sx={{ fontSize: 32, color: "#3b82f6", transform: dragActive ? "scale(1.1)" : "scale(1)", transition: "transform 0.2s" }} />
+          <CloudUploadIcon sx={{ fontSize: '1.8750vw', color: "#3b82f6", transform: dragActive ? "scale(1.1)" : "scale(1)", transition: "transform 0.2s" }} />
 
-          <Typography fontSize={13} mt={1} color="#6b7280">
+          <Typography fontSize={'0.8333vw'} mt={'0.4167vw'} color="#6b7280">
             Drag & Drop your files or{" "}
             <label
               htmlFor="fileUpload"
@@ -170,29 +170,30 @@ const UploadTenderModal = () => {
 
         {file && (
           <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: '1vh'}}>
-          <Typography fontSize={12}>
+          <Typography fontSize={'0.7292vw'}>
             Selected: {file.name}
           </Typography>
           <IconButton onClick={() => setFile(null)} sx={{ color: "#ef4444" }}>
-            <DeleteIcon sx={{fontSize: '1vw',}}/>
+            <DeleteIcon sx={{fontSize: '1.0417vw'}}/>
           </IconButton>
           </Box>
         )}
 
-        <Box display="flex" justifyContent="space-between" mt={2}>
-          <Typography fontSize={11} color="#6b7280">
+        <Box display="flex" justifyContent="space-between" mt={'0.8333vw'}>
+          <Typography fontSize={'0.625vw'} color="#6b7280">
             Supported format: PDF
           </Typography>
         </Box>
 
-        <Box display="flex" justifyContent="flex-end" mt={3}>
+        <Box display="flex" justifyContent="flex-end" mt={'1.25vw'}>
           <Button
             onClick={handleUpload}
             variant="contained"
             sx={{
               background: "#2563eb",
               textTransform: "none",
-              px: 3,
+              px: '1.25vw',
+              fontSize: '0.8333vw',
               borderRadius: 2,
             }}
           >

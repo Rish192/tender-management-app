@@ -26,14 +26,20 @@ import {
 const sectionCard = {
   background: "#cfe3ec",
   borderRadius: 3,
-  p: 3,
-  mb: 3,
+  p: '1.25vw',
+  mb: '1.25vw',
   boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.05)",
 };
 
 const inputStyle = {
   background: "#eaf1f6",
   borderRadius: 2,
+  '& .MuiInputBase-input': {
+    fontSize: '0.9375vw',
+  },
+  '& .MuiInputLabel-root': {
+    fontSize: '1.0417vw',
+  }
 };
 
 const EditTenderModal = () => {
@@ -255,32 +261,32 @@ const EditTenderModal = () => {
           maxHeight: "95vh",
           overflow: "auto",
           background: "#e3eef5",
-          p: 3,
+          p: '1.25vw',
           borderRadius: 3,
           margin: "20px auto",
         }}
       >
         {/* ================= HEADER ================= */}
         <Box sx={sectionCard}>
-          <Typography fontWeight={600} color="#2f4db5">
+          <Typography fontSize={'1.0417vw'} fontWeight={600} color="#2f4db5">
             Upload Tender Document
           </Typography>
 
-          <Typography fontSize={12} mt={1} color="#555">
+          <Typography fontSize={'0.7292vw'} mt={'0.4167vw'} color="#555">
             Instruction: Upload complete tender document including GeM Bid Document,
             Buyer Uploaded ATC Document, Corrigendum(s) / Addendum(s) (if any)
           </Typography>
 
-          <Box display="flex" justifyContent="flex-end" mt={2} gap={2}>
+          <Box display="flex" alignItems="center" justifyContent="flex-end" mt={'0.8333vw'} gap={'0.8333vw'}>
             <Button
               variant="contained"
               startIcon={<UploadFileIcon />}
-              sx={{ background: "#2F4DB5" }}
+              sx={{ background: "#2F4DB5", fontSize: '0.8333vw' }}
             >
               Select PDF File(s) to upload
             </Button>
 
-            <Box sx={{ background: "#fff", px: 2, py: 1, borderRadius: 2 }}>
+            <Box sx={{ background: "#fff", px: '0.8333vw', py: '0.4167vw', fontSize: '0.8333vw', borderRadius: 2 }}>
               RFP.pdf ✕
             </Box>
           </Box>
@@ -288,11 +294,11 @@ const EditTenderModal = () => {
 
         {/* ================= SALIENT DETAILS ================= */}
         <Box sx={sectionCard}>
-          <Typography fontWeight={600} color="#2f4db5" mb={2}>
+          <Typography fontWeight={600} fontSize={'1.0417vw'} color="#2f4db5" mb={'1.0417vw'}>
             Salient Tender Details
           </Typography>
 
-          <Box display="grid" gridTemplateColumns="repeat(4,1fr)" gap={2}>
+          <Box display="grid" gridTemplateColumns="repeat(4,1fr)" gap={'0.8333vw'}>
             <TextField label="Purchase / Service Requisition number(s)*" value={formData.purchase_service_requisition_number} onChange={handleChange("purchase_service_requisition_number")} sx={inputStyle} />
             <TextField label="Tender Number*" value={formData.tender_number} onChange={handleChange("tender_number")} sx={inputStyle} />
             <TextField label="Tender Subject*" value={formData.tender_subject} onChange={handleChange("tender_subject")} sx={inputStyle} />
@@ -304,32 +310,32 @@ const EditTenderModal = () => {
           </Box>
 
           {/* FINANCIAL */}
-          <Box display="flex" gap={3} mt={3}>
-            <Box flex={1} sx={{ background: "#dde6ec", p: 2, borderRadius: 2 }}>
-              <Typography fontSize={13}>Earnest Money Deposit (INR)</Typography>
+          <Box display="flex" gap={'1.25vw'} mt={'1.25vw'}>
+            <Box flex={1} sx={{ background: "#dde6ec", p: '0.8333vw', borderRadius: 2 }}>
+              <Typography fontSize={'0.7292vw'}>Earnest Money Deposit (INR)</Typography>
               <TextField fullWidth value={formData.total_emd} onChange={handleChange("total_emd")} sx={inputStyle} />
-              <Button fullWidth sx={{ mt: 1, background: "#2F4DB5", color: "#fff" }}>
+              <Button fullWidth sx={{ mt: '0.4167vw', fontSize: '0.8333vw', background: "#2F4DB5", color: "#fff" }}>
                 View More
               </Button>
             </Box>
 
-            <Box flex={2} sx={{ background: "#dde6ec", p: 2, borderRadius: 2 }}>
-              <Typography fontSize={13}>Financial Criteria (FBEC)</Typography>
+            <Box flex={2} sx={{ background: "#dde6ec", p: '0.8333vw', borderRadius: 2 }}>
+              <Typography fontSize={'0.7292vw'}>Financial Criteria (FBEC)</Typography>
 
-              <Box display="flex" gap={2} mt={2}>
+              <Box display="flex" gap={'0.8333vw'} mt={'0.8333vw'}>
                 <TextField label="Net Worth (INR)" fullWidth value={formData.net_worth} onChange={handleChange("net_worth")} sx={inputStyle} />
                 <TextField label="Average Annual Turnover (INR)" value={formData.avg_annual_turnover} onChange={handleChange("avg_annual_turnover")} fullWidth sx={inputStyle} />
                 <TextField label="Working Capital (INR)" value={formData.working_capital} onChange={handleChange("working_capital")} fullWidth sx={inputStyle} />
               </Box>
 
-              <Button sx={{ mt: 2, background: "#2F4DB5", color: "#fff" }}>
+              <Button sx={{ mt: '0.4167vw', fontSize: '0.8333vw', background: "#2F4DB5", color: "#fff" }}>
                 View More
               </Button>
             </Box>
           </Box>
 
           {/* DROPDOWNS */}
-          <Box display="grid" gridTemplateColumns="repeat(3,1fr)" gap={2} mt={3}>
+          <Box display="grid" gridTemplateColumns="repeat(3,1fr)" gap={'0.8333vw'} mt={'1.25vw'}>
             <TextField select label="MSE Policy" value={formData.mse_policy} onChange={handleChange("mse_policy")} sx={inputStyle}>
               <MenuItem value="Applicable">Applicable</MenuItem>
               <MenuItem value="Not Applicable">Not Applicable</MenuItem>
@@ -350,12 +356,12 @@ const EditTenderModal = () => {
 
         {/* ================= STARTUP ================= */}
         <Box sx={sectionCard}>
-          <Typography fontWeight={600} color="#2f4db5">
+          <Typography fontSize={'1.0417vw'} fontWeight={600} color="#2f4db5">
             Startup Criteria
           </Typography>
 
           {rows.map((r, i) => (
-            <Box key={i} display="flex" gap={2} mt={2} alignItems="center">
+            <Box key={i} display="flex" gap={'0.8333vw'} mt={'1.0417vw'} alignItems="center">
               <TextField label="Industry" fullWidth value={r.industry} onChange={(e) => {
                 const newRows = [...rows];
                 newRows[i].industry = e.target.value;
@@ -372,82 +378,44 @@ const EditTenderModal = () => {
                 setRows(newRows);
               }} sx={inputStyle} />
 
-              <IconButton onClick={() => removeRow(i)}>
-                <DeleteIcon color="error" />
+              <IconButton onClick={() => removeRow(i)} sx={{p: '0.4167vw'}}>
+                <DeleteIcon color="error" sx={{fontSize: '1.25vw'}}/>
               </IconButton>
             </Box>
           ))}
 
           <Box display="flex" justifyContent="flex-end">
-            <Button onClick={addRow} sx={{ mt: 2, background: "#2F4DB5", color: "#fff" }}>
+            <Button onClick={addRow} sx={{ mt: '0.8333vw', background: "#2F4DB5", color: "#fff" }}>
               + Add
             </Button>
           </Box>
         </Box>
 
-        {/* ================= PARAMETERS ================= */}
-        {/* <Box sx={sectionCard}>
-          <Typography fontWeight={600} color="#2f4db5">
-            Upload Tender Document
-          </Typography>
-
-          <Typography fontSize={12} color="#555" mt={1}>
-            Insert additional Tender specific parameter(s)
-          </Typography>
-
-          <Box display="flex" gap={2} mt={2}>
-            <TextField placeholder="Parameter Name" fullWidth sx={inputStyle} />
-            <TextField placeholder="Parameter Description" fullWidth sx={inputStyle} />
-            <TextField placeholder="Parameter Type" fullWidth sx={inputStyle} />
-
-            <Button onClick={addParam} sx={{ background: "#2F4DB5", color: "#fff" }}>
-              + Add
-            </Button>
-          </Box>
-
-          {params.map((p, i) => (
-            <Box key={i} display="flex" justifyContent="space-between" mt={2} sx={{ background: "#fff", p: 2, borderRadius: 2 }}>
-              <Typography fontSize={12}>
-                Lorem Ipsum...
-              </Typography>
-
-              <Box>
-                <IconButton>✎</IconButton>
-                <IconButton onClick={() => removeParam(i)}>
-                  <DeleteIcon color="error" />
-                </IconButton>
-              </Box>
-            </Box>
-          ))}
-        </Box> */}
-
         {/* ================= BULK UPLOAD ================= */}
         <Box sx={sectionCard}>
-          <Typography fontWeight={600} color="#2f4db5">
+          <Typography fontSize={'1.0417vw'} fontWeight={600} color="#2f4db5">
             Bulk Upload Bids
           </Typography>
 
-          <Box display="flex" justifyContent="space-between" mt={2}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" mt={'1.0417vw'}>
             <Box>
               <Button
                 onClick={() => setCbaUploadOpen(true)}
-                // component="label"
                 startIcon={<UploadFileIcon />}
-                sx={{ background: "#2F4DB5", color: "#fff" }}
+                sx={{ background: "#2F4DB5", color: "#fff", fontSize: '0.8333vw' }}
               >
                 Select Folder or Zip File
-                {/* <input hidden type="file" onChange={handleZip} /> */}
               </Button>
 
-              {zipFile && <Typography mt={1}>{zipFile.name}</Typography>}
+              {zipFile && <Typography sx={{mt: '0.4167vw', fontSize: '0.7292vw'}}>{zipFile.name}</Typography>}
             </Box>
 
-            <Box display="flex" gap={2}>
-              <Button>Reset</Button>
-              <Button onClick={handleSaveDraft}>Save Draft</Button>
+            <Box display="flex" gap={'0.8333vw'}>
+              <Button sx={{fontSize: '0.8333vw'}}>Reset</Button>
+              <Button sx={{fontSize: '0.8333vw'}} onClick={handleSaveDraft}>Save Draft</Button>
               <Button variant="contained" onClick={handleSubmit} 
               disabled={!isCbaReady} 
-                sx={{ background: isCbaReady ? "#2F4DB5" : "#cccccc",
+                sx={{ background: isCbaReady ? "#2F4DB5" : "#cccccc", fontSize: '0.8333vw',
                       "&:disabled": {background: "#cccccc", color: "#666"}
                  }}>
                 Validate and Save Tender

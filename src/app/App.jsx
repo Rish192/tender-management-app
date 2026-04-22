@@ -11,11 +11,6 @@ import NotificationPanel from "../components/common/NotificationPanel";
 const GlobalUI = () => {
   const { notificationPanelOpen, setNotificationPanelOpen, panelNotifications } = useUI();
 
-  // const dummyNotifications = [
-  //   { id: 1, text: "Tender processed successfully", type: "close" },
-  //   { id: 2, text: "CBA validation completed", type: "mark_read" },
-  // ];
-
   return (
     <NotificationPanel
       open={notificationPanelOpen}

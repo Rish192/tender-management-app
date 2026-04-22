@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 
 const Header = ({ title = "Dashboard - Quick Overview" }) => {
   return (
-    <Box mb={2}>
+    <Box mb={'0.8333vw'}>
       <Typography variant="h5" fontWeight="bold">
         {title}
       </Typography>
