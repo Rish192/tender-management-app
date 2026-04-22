@@ -8,7 +8,7 @@ const Modal = ({ open, onClose, children }) => {
       <Box
         sx={{
           background: "white",
-          p: 4,
+          p: '1.667vw',
           borderRadius: 2,
           width: "50%",
           margin: "100px auto",

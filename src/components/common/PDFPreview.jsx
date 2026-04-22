@@ -56,13 +56,13 @@ const PDFPreview = ({ open, onClose, data }) => {
       }}
     >
       {/* HEADER */}
-      <Box display="flex" justifyContent="space-between" p={2}>
-        <Typography fontWeight={600} fontSize={18}>
+      <Box sx={{p: '0.8333vw', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Typography fontWeight={600} fontSize={'0.9375vw'}>
           Preview Window
         </Typography>
 
-        <IconButton onClick={onClose} sx={{ background: "#ef4444", color: "#fff" }}>
-          <CloseIcon />
+        <IconButton onClick={onClose} sx={{ background: "#ef4444", color: "#fff", p: '0.4167vw' }}>
+          <CloseIcon sx={{fontSize: '0.8333vw'}}/>
         </IconButton>
       </Box>
 
@@ -78,14 +78,15 @@ const PDFPreview = ({ open, onClose, data }) => {
       </Box>
 
       {/* FOOTER */}
-      <Box p={2}>
+      <Box p={'0.8333vw'}>
         <Box
           sx={{
             background: "#2F4DB5",
             color: "#fff",
             textAlign: "center",
-            py: 1,
+            py: '0.4167vw',
             borderRadius: 2,
+            fontSize: '0.8333vw'
           }}
         >
           {`${data.fileName}`}

@@ -27,7 +27,7 @@ const NotificationPanel = ({
           maxHeight: "85vh",
           background: "#eaf1f6",
           borderRadius: 3,
-          p: 3,
+          p: '1.25vw',
           margin: "80px auto",
           boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
           position: "relative",
@@ -38,26 +38,27 @@ const NotificationPanel = ({
           onClick={onClose}
           sx={{
             position: "absolute",
-            top: -15,
-            right: -15,
+            top: '-0.8333vw',
+            right: '-0.8333vw',
             background: "#ef4444",
             color: "#fff",
+            p: '0.4167vw',
             "&:hover": { background: "#dc2626" },
           }}
         >
-          <CloseIcon />
+          <CloseIcon sx={{fontSize: '1.0417vw'}} />
         </IconButton>
 
         {/* HEADER */}
-        <Typography fontSize={20} fontWeight={600} color="#2F4DB5">
+        <Typography fontSize={'1.0417vw'} fontWeight={600} color="#2F4DB5">
           Notifications
         </Typography>
 
         <Box
           sx={{
-            height: "1px",
+            height: '0.0521vw',
             background: "#cbd5e1",
-            my: 2,
+            my: '0.8333vw',
           }}
         />
 
@@ -66,7 +67,7 @@ const NotificationPanel = ({
           sx={{
             maxHeight: "65vh",
             overflowY: "auto",
-            pr: 1,
+            pr: '0.4167vw',
           }}
         >
           {Array.isArray(notifications) && notifications.length > 0 ? (
@@ -108,12 +109,12 @@ const NotificationItem = ({ data, onView, onClose }) => {
   return (
     <Box
       sx={{
-        background: isRead ? '#f1f5f9' : "#fff", //#f8fafc
+        background: isRead ? '#f1f5f9' : "#fff",
         border: "1px solid #cbd5e1",
         borderRadius: 2,
-        px: 2,
-        py: 1.5,
-        mb: 1.5,
+        px: '0.8333vw',
+        py: '0.625vw',
+        mb: '0.625vw',
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -121,26 +122,22 @@ const NotificationItem = ({ data, onView, onClose }) => {
       }}
     >
       {/* TEXT */}
-      <Typography fontSize={13} color="#444" flex={1} pr={2}>
+      <Typography fontSize={'0.7292vw'} color="#444" flex={1} pr={'0.8333vw'}>
         {data.message}
       </Typography>
 
       {/* ACTIONS */}
-      <Box display="flex" alignItems="center" gap={1}>
+      <Box display="flex" alignItems="center" gap={'0.4167vw'}>
 
         {/* MARK AS READ */}
         <Typography
           onClick={handleMarkRead}
           sx={{
-            fontSize: 12,
-            px: 1.5,
-            py: 0.5,
+            fontSize: '0.7292vw',
+            px: '0.625vw',
+            py: '0.208vw',
             borderRadius: "999px",
             cursor: "pointer",
-            border: "1px solid",
-            // borderColor: isRead ? "green" : "#ccc",
-            // color: isRead ? "green" : "gray",
-            // background: isRead ? "#e6f9ec" : "#fff",
             borderColor: isRead ? "#22c55e" : "#3b82f6",
             color: isRead ? "#166534" : "#1d4ed8",
             background: isRead ? "#f0fdf4" : "#eff6ff",
@@ -159,8 +156,8 @@ const NotificationItem = ({ data, onView, onClose }) => {
             size="small"
             onClick={onView}
             sx={{
-              width: 32,
-              height: 32,
+              width: '1.667vw',
+              height: '1.667vw',
               borderRadius: "50%",
               background: "#2F4DB5",
               color: "#fff",
@@ -169,22 +166,6 @@ const NotificationItem = ({ data, onView, onClose }) => {
             <VisibilityIcon fontSize="small" />
           </IconButton>
         )}
-
-        {/* CLOSE BUTTON */}
-        {/*<IconButton
-          size="small"
-          onClick={onClose}
-          sx={{
-            width: 32,           
-            height: 32,          
-            borderRadius: "50%", 
-            background: "#fecaca",
-            color: "#7f1d1d",
-          }}
-        >
-          ✕
-        </IconButton>*/}
-
       </Box>
     </Box>
   );

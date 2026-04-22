@@ -17,10 +17,10 @@ const ChatbotWidget = () => {
           onClick={() => setOpen(true)}
           sx={{
             position: "fixed",
-            bottom: 20,
-            right: 20,
-            width: 56,
-            height: 56,
+            bottom: '1.0417vw',
+            right: '1.0417vw',
+            width: '2.9167vw',
+            height: '2.9167vw',
             borderRadius: "50%",
             background: "linear-gradient(135deg, #4f46e5, #06b6d4)",
             display: "flex",
@@ -31,7 +31,7 @@ const ChatbotWidget = () => {
             zIndex: 999,
           }}
         >
-          <AutoAwesomeIcon sx={{ color: "#fff" }} />
+          <AutoAwesomeIcon sx={{ fontSize: '1.4583vw', color: "#fff" }} />
         </Box>
       )}
 
@@ -40,10 +40,10 @@ const ChatbotWidget = () => {
         <Box
           sx={{
             position: "fixed",
-            bottom: 20,
-            right: 20,
-            width: 360,
-            height: 520,
+            bottom: '1.0417vw',
+            right: '1.0417vw',
+            width: '20.833vw',
+            height: '55.556vh',
             background: "#dbe9f1",
             borderRadius: "16px",
             boxShadow: "0 20px 50px rgba(0,0,0,0.2)",
@@ -57,19 +57,19 @@ const ChatbotWidget = () => {
           <Box
             sx={{
               background: "#ffffff",
-              px: 2,
-              py: 1.5,
+              px: '0.8333vw',
+              py: '0.625vw',
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               borderBottom: "3px solid #2F4DB5",
             }}
           >
-            <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" alignItems="center" gap={'0.4167vw'}>
               <Box
                 sx={{
-                  width: 34,
-                  height: 34,
+                  width: '1.8750vw',
+                  height: '1.8750vw',
                   borderRadius: "10px",
                   background: "#eef2ff",
                   display: "flex",
@@ -77,17 +77,17 @@ const ChatbotWidget = () => {
                   justifyContent: "center",
                 }}
               >
-                <SmartToyIcon sx={{ color: "#2F4DB5" }} />
+                <SmartToyIcon sx={{ fontSize: '1.25vw', color: "#2F4DB5" }} />
               </Box>
 
-              <Typography fontWeight={600} color="#1e3a8a">
+              <Typography sx={{fontSize: '1.0417vw', fontWeight: 600, color: "#1e3a8a"}}>
                 AI Assistant
               </Typography>
 
               <Box
                 sx={{
-                  width: 6,
-                  height: 6,
+                  width: '0.4167vw',
+                  height: '0.4167vw',
                   borderRadius: "50%",
                   background: "#3b82f6",
                 }}
@@ -95,14 +95,14 @@ const ChatbotWidget = () => {
             </Box>
 
             {/* 🔥 CLOSE → BACK TO ICON */}
-            <IconButton onClick={() => setOpen(false)}>
-              <CloseIcon />
+            <IconButton onClick={() => setOpen(false)} sx={{p: '0.4167vw'}}>
+              <CloseIcon sx={{fontSize: '1.0417vw'}}/>
             </IconButton>
           </Box>
 
           {/* BODY */}
-          <Box sx={{ flex: 1, px: 2, py: 2, overflowY: "auto" }}>
-            <Typography textAlign="center" fontSize={12} color="#6b7280" mb={2}>
+          <Box sx={{ flex: 1, p: '0.8333vw', overflowY: "auto" }}>
+            <Typography textAlign="center" fontSize={'0.7292vw'} color="#6b7280" mb={'0.8333vw'}>
               Mon 7:55 PM
             </Typography>
 
@@ -118,14 +118,14 @@ const ChatbotWidget = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              px: 1.5,
-              py: 1,
+              px: '0.625vw',
+              py: '0.4167vw',
               background: "#ffffff",
               borderTop: "1px solid #e5e7eb",
             }}
           >
-            <IconButton>
-              <AddIcon />
+            <IconButton sx={{p: '0.4167vw'}}>
+              <AddIcon sx={{fontSize: '1.25vw'}} />
             </IconButton>
 
             <Box
@@ -133,20 +133,20 @@ const ChatbotWidget = () => {
                 flex: 1,
                 background: "#f3f4f6",
                 borderRadius: "999px",
-                px: 2,
-                py: 0.8,
-                mx: 1,
+                px: '0.8333vw',
+                py: '0.4167vw',
+                mx: '0.4167vw',
               }}
             >
               <InputBase
                 placeholder="Enter your text here!"
                 fullWidth
-                sx={{ fontSize: 13 }}
+                sx={{ fontSize: '0.7292vw' }}
               />
             </Box>
 
-            <IconButton>
-              <SendIcon sx={{ color: "#2563eb" }} />
+            <IconButton sx={{p: '0.4167vw'}}>
+              <SendIcon sx={{ color: "#2563eb", fontSize: '1.25vw' }} />
             </IconButton>
           </Box>
         </Box>
@@ -165,19 +165,19 @@ const Bubble = ({ text, left, small }) => {
     <Box
       display="flex"
       justifyContent={left ? "flex-start" : "flex-end"}
-      mb={1.5}
+      mb={'0.625vw'}
     >
       <Box
         sx={{
           maxWidth: "75%",
-          px: 2,
-          py: small ? 0.5 : 1,
+          px: '0.8333vw',
+          py: small ? '0.2083vw' : '0.4167vw',
           borderRadius: left
             ? "12px 12px 12px 4px"
             : "12px 12px 4px 12px",
           background: left ? "#ffffff" : "#2F4DB5",
           color: left ? "#333" : "#fff",
-          fontSize: 13,
+          fontSize: '0.8333vw',
           boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
         }}
       >
