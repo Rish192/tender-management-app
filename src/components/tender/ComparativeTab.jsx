@@ -77,18 +77,16 @@ const ComparativeTab = () => {
 
   if (loading) {
     return (
-      <Box mt={3} p={3} display="flex" alignItems="center">
-        <CircularProgress size={24} sx={{ mr: 2 }} />
+      <Box mt={'1.0417vw'} p={'1.25vw'} display="flex" alignItems="center">
+        <CircularProgress size={'1.25vw'} sx={{ mr: '0.8333vw' }} />
         <Typography>Loading Comparative Analysis...</Typography>
       </Box>
     );
   }
 
   return (
-    <Box mt={3}>
-      <Typography fontSize={18} fontWeight={600} mb={2}>
-        Comparative Analysis
-      </Typography>
+    <Box sx={{display: 'flex', flexDirection: 'column', gap: '1.25vw', overflow: 'hidden'}}>
+      <SectionTitle title="Comparative Analysis" />
 
       {/* TABLE */}
       <Box sx={{
@@ -105,26 +103,26 @@ const ComparativeTab = () => {
             sx={{
               background: "#2F4DB5",
               color: "#fff",
-              fontSize: 13,
+              fontSize: '0.7292vw',
               fontWeight: 500
             }}
           >
-            <Box flex={1.5} minWidth={150} px={2} py={1.5} sx={{ borderRight: "1px solid rgba(255,255,255,0.2)" }}>
+            <Box flex={1.5} minWidth={'5.2083'} px={'0.8333vw'} py={'0.625vw'} sx={{ borderRight: "1px solid rgba(255,255,255,0.2)" }}>
               Bidder Name
             </Box>
             {columns.map(col => (
-              <Box key={col.key} flex={1} minWidth={120} px={2} py={1.5} sx={{ borderRight: "1px solid rgba(255,255,255,0.2)" }}>
+              <Box key={col.key} flex={1} minWidth={'6.25vw'} px={'0.8333vw'} py={'0.625vw'} sx={{ borderRight: "1px solid rgba(255,255,255,0.2)" }}>
                 {col.label}
               </Box>
             ))}
-            <Box flex={1} minWidth={120} px={2} py={1.5}>
+            <Box flex={1} minWidth={'6.25vw'} px={'0.8333vw'} py={'0.625vw'}>
               Status
             </Box>
           </Box>
 
           {/* ROWS */}
           {biddersData.length === 0 ? (
-            <Box p={3} textAlign="center" color="#666">No bidders found.</Box>
+            <Box p={'1.25vw'} textAlign="center" color="#666" fontSize={'0.7292vw'}>No bidders found.</Box>
           ) : (
             biddersData.map((b, i) => (
               <Box
@@ -135,21 +133,21 @@ const ComparativeTab = () => {
                   borderBottom: "1px solid #e5e7eb",
                 }}
               >
-                <Box flex={1.5} minWidth={150} px={2} py={1.5} fontWeight={500} sx={{ borderRight: "1px solid #e5e7eb" }}>
+                <Box flex={1.5} minWidth={'8.333vw'} px={'0.8333vw'} py={'0.625vw'} fontWeight={500} sx={{ fontSize: '0.8333vw', borderRight: "1px solid #e5e7eb" }}>
                   {b.name}
                 </Box>
                 {columns.map(col => (
-                  <Box key={col.key} flex={1} minWidth={120} px={2} py={1.5} sx={{ borderRight: "1px solid #e5e7eb", fontSize: 14 }}>
+                  <Box key={col.key} flex={1} minWidth={'6.25vw'} px={'0.8333vw'} py={'0.625vw'} sx={{ fontSize: '0.7292vw', borderRight: "1px solid #e5e7eb" }}>
                     {b.values[col.key]}
                   </Box>
                 ))}
                 <Box
                   flex={1}
-                  minWidth={120}
-                  px={2}
-                  py={1.5}
+                  minWidth={'6.25vw'}
+                  px={'0.8333vw'}
+                  py={'0.625vw'}
                   fontWeight={600}
-                  fontSize={14}
+                  fontSize={'0.7292vw'}
                   color={b.status === "Applicable" ? "green" : "red"}
                 >
                   {b.status}
@@ -164,3 +162,21 @@ const ComparativeTab = () => {
 };
 
 export default ComparativeTab;
+
+/* ---------- UI HELPERS ---------- */
+
+const SectionTitle = ({ title }) => (
+  <Box sx={{flex: 0.5}}>
+    <Typography fontWeight={600} fontSize={'0.9375vw'} color="#1f3a8a">
+      {title}
+    </Typography>
+    <Box
+      mt={'0.2083vw'}
+      sx={{
+        height: '0.1042vw',
+        width: "25%",
+        background: "#cbd5e1",
+      }}
+    />
+  </Box>
+);
