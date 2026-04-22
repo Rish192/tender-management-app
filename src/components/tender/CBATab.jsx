@@ -53,9 +53,9 @@ const CBACell = ({ tenderId, bidId, property, openPreview }) => {
   return (
     <Box
       flex={1}
-      minWidth={160}
-      px={2}
-      py={1.5}
+      minWidth={'8.333vw'}
+      px={'0.8333vw'}
+      py={'0.625vw'}
       onClick={() => {
         if (cellData?.file_path) {
           openPreview(cellData.file_path, cellData.page_number || 1, cellData.doc_name);
@@ -66,6 +66,7 @@ const CBACell = ({ tenderId, bidId, property, openPreview }) => {
         cursor: "pointer",
         wordBreak: "break-word",
         whiteSpace: "normal",
+        fontSize: '0.7292vw',
         lineHeight: 1.4
       }}
     >
@@ -126,21 +127,17 @@ const CBATab = () => {
     setPreviewOpen(true);
   };
 
-  //if (loading) return <Typography p={3}>Loading CBA Data...</Typography>
-  //if (bidders.length === 0) return <Typography p={3}>No Bidders found for this tender.</Typography>
 
   return (
-    <Box mt={3}>
+    <Box sx={{height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25vw', overflow: 'hidden'}}>
       {/* HEADER */}
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography fontSize={18} fontWeight={600}>
-          Commercial Bid Analysis
-        </Typography>
+      <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+        <SectionTitle title="Commercial Bid Analysis" />
 
-        <Box display="flex" gap={2}>
+        <Box sx={{display: "flex", gap: '0.8333vw'}}>
           <Button
             variant="outlined"
-            sx={{ borderColor: "#2F4DB5", color: "#2F4DB5" }}
+            sx={{ borderColor: "#2F4DB5", color: "#2F4DB5", fontSize: '0.7292vw' }}
           >
             Reset CBA
           </Button>
@@ -149,7 +146,7 @@ const CBATab = () => {
             variant="contained"
             disabled={isSending}
             onClick={handleSendForChecking}
-            sx={{ background: "#2F4DB5", textTransform: "none" }}
+            sx={{ background: "#2F4DB5", textTransform: "none", fontSize: '0.7292vw' }}
           >
             {isSending ? "Sending..." : "Send for Checking"}
           </Button>
@@ -157,36 +154,63 @@ const CBATab = () => {
       </Box>
 
       {/* TABLE */}
-      <Box mt={2} sx={{
+      <Box sx={{
         borderRadius: 2,
         overflow: "auto",
-        maxHeight: "500px",
+        flex: 1,
+        minHeight: 0,
         border: "1px solid #e5e7eb",
         background: "#fff",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.05)"
+        boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
+        scrollbarWidth: 'thin',
+        '&::-webkit-scrollbar': { width: '0.2083vw' },
+        '&::-webkit-scrollbar-track': { background: 'transparent' },
+        '&::-webkit-scrollbar-thumb': { borderRadius: '3px' },
+        scrollbarColor: '#5fb2e2ff transparent'
       }}>
         <Box sx={{ minWidth: "max-content" }}>
-          <Box display="flex" sx={{ background: "#eef2f7", borderBottom: "1px solid #e5e7eb", fontSize: 13, top: 0 }}>
+          <Box display="flex" sx={{ background: "#eef2f7", borderBottom: "1px solid #e5e7eb", top: 0 }}>
             <Box
               flex={0.5}
-              minWidth={100}
-              px={2}
-              py={1.5}
+              minWidth={'5.2083vw'}
+              px={'0.8333vw'}
+              py={'0.6250vw'}
               fontWeight={500}
               sx={{
                 position: 'sticky',
                 left: 0,
                 background: "#eef2f7",
                 zIndex: 11,
-                borderRight: "1px solid #e5e7eb"
+                borderRight: "1px solid #e5e7eb",
+                display: 'flex',
+                alignItems: 'center'
               }}
             >
-              Evaluation Status
+              <Typography sx={{fontSize: '0.8333vw'}}>
+                Evaluation Status
+              </Typography>
             </Box>
 
             {bidders.map((bidder) => (
-              <Box key={bidder.bidId} flex={1} minWidth={160} px={2} py={1.5}>
-                <Select fullWidth size="small" defaultValue="Acceptable" sx={{ background: "#fff" }}>
+              <Box key={bidder.bidId} flex={1} minWidth={'8.333vw'} px={'0.8333vw'} py={'0.625vw'}>
+                <Select fullWidth size="small" defaultValue="Acceptable" 
+                  sx={{ 
+                    '& .MuiSelect-select': {
+                      fontSize: '0.7292vw'
+                    },
+                    background: "#fff" 
+                  }}
+                  MenuProps={{
+                    // Styles for the dropdown menu container
+                    sx: {
+                      '& .MuiMenuItem-root': {
+                        fontSize: '0.7292vw',
+                        paddingTop: '0.4167vw',
+                        paddingBottom: '0.4167vw',
+                      },
+                    },
+                  }}
+                >
                   <MenuItem value="Acceptable">Acceptable</MenuItem>
                   <MenuItem value="Non Acceptable">Non Acceptable</MenuItem>
                   <MenuItem value="Generate Query">Generate Query</MenuItem>
@@ -202,17 +226,17 @@ const CBATab = () => {
             sx={{
               background: "#2F4DB5",
               color: "#fff",
-              fontSize: 13,
+              fontSize: '0.8333vw',
               position: 'sticky',
               top: 0,
               zIndex: 10
             }}
           >
-            <Box flex={0.5} minWidth={100} px={2} py={1.5} sx={{ position: 'sticky', left: 0, background: "#2F4DB5", zIndex: 11, borderRight: "1px solid rgba(255,255,255,0.2)" }}>
+            <Box flex={0.5} minWidth={'5.2083vw'} px={'0.8333vw'} py={'0.6250vw'} sx={{ position: 'sticky', left: 0, background: "#2F4DB5", zIndex: 11, borderRight: "1px solid rgba(255,255,255,0.2)" }}>
               Bidder Details
             </Box>
             {bidders.map((bidder) => (
-              <Box key={bidder.bidId} flex={1} minWidth={160} px={2} py={1.5}>
+              <Box key={bidder.bidId} flex={1} minWidth={'8.333vw'} px={'0.8333vw'} py={'0.625vw'}>
                 {bidder.bidderName}
               </Box>
             ))}
@@ -230,7 +254,7 @@ const CBATab = () => {
                 }}
               >
                 <Box
-                  flex={0.5} minWidth={100} p={2} fontWeight={500}
+                  flex={0.5} minWidth={'5.2083vw'} px={'0.8333vw'} py={'0.625vw'} fontSize={'0.8333vw'} fontWeight={500}
                   sx={{
                     position: 'sticky',
                     left: 0,
@@ -259,28 +283,31 @@ const CBATab = () => {
           {/* DOCUMENT CHECKLIST */}
           <Box display="flex" sx={{ background: "#f1f5f9", borderBottom: "1px solid #e5e7eb" }}>
             <Box
-              flex={0.5} minWidth={100} p={2} fontWeight={600}
+              flex={0.5} minWidth={'5.2083vw'} px={'0.8333vw'} py={'0.625vw'} fontWeight={600}
               sx={{
                 position: 'sticky',
                 left: 0,
                 background: "#f1f5f9",
                 zIndex: 5,
                 borderRight: "1px solid #e5e7eb",
-                boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                fontSize: '0.8333vw'
               }}
             >
               Document Checklist
             </Box>
 
             {bidders.map((_, i) => (
-              <Box key={i} flex={1} minWidth={160} p={2} display="flex" alignItems="center" gap={1}>
+              <Box key={i} flex={1} minWidth={'8.333vw'} px={'0.8333vw'} py={'0.625vw'} display="flex" alignItems="center" gap={'0.4167vw'}>
                 {i % 2 === 0 ? (
-                  <CheckCircleIcon sx={{ color: "green" }} />
+                  <CheckCircleIcon sx={{ fontSize: '1.25vw', color: "green" }} />
                 ) : (
-                  <CancelIcon sx={{ color: "red" }} />
+                  <CancelIcon sx={{ fontSize: '1.25vw', color: "red" }} />
                 )}
-                <Typography fontSize={12}>Term 1</Typography>
-                <ArrowDropDownIcon />
+                <Box sx={{display: 'flex', gap: '0vw', alignItems: 'center'}}>
+                  <Typography fontSize={'0.7292vw'}>Term 1</Typography>
+                  <ArrowDropDownIcon sx={{fontSize: '1.25vw'}} />
+                </Box>
               </Box>
             ))}
           </Box>
@@ -288,25 +315,26 @@ const CBATab = () => {
           {/* ACTION ROW */}
           <Box display="flex" sx={{ background: "#ffffff" }}>
             <Box
-              flex={0.5} minWidth={100} p={2} fontWeight={600}
+              flex={0.5} minWidth={'5.2083vw'} px={'0.8333vw'} py={'0.625vw'} fontWeight={600}
               sx={{
                 position: 'sticky',
                 left: 0,
                 background: "#ffffff",
                 zIndex: 5,
                 borderRight: "1px solid #e5e7eb",
-                boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)"
+                boxShadow: "2px 0 5px -2px rgba(0,0,0,0.1)",
+                fontSize: '0.8333vw'
               }}
             >
               Actions
             </Box>
 
             {bidders.map((_, i) => (
-              <Box key={i} flex={1} minWidth={160} p={2} display="flex" alignItems="center" gap={1}>
-                <Typography fontSize={12}>No Query</Typography>
+              <Box key={i} flex={1} minWidth={'8.333vw'} px={'0.8333vw'} py={'0.625vw'} display="flex" alignItems="center" gap={'0.4167vw'}>
+                <Typography fontSize={'0.7292vw'}>No Query</Typography>
 
-                <IconButton size="small">
-                  <AddIcon sx={{ color: "#2F4DB5" }} />
+                <IconButton sx={{p: '0.2083vw'}}>
+                  <AddIcon sx={{ fontSize: '1.0417vw', color: "#2F4DB5" }} />
                 </IconButton>
               </Box>
             ))}
@@ -315,7 +343,7 @@ const CBATab = () => {
       </Box>
 
       {/* PAGINATION */}
-      <Box
+      {/* <Box
         sx={{
           width: "100%",    
           display: "flex",
@@ -343,7 +371,7 @@ const CBATab = () => {
 
           <Button>{">"}</Button>
         </Box>
-      </Box>
+      </Box> */}
 
       {/* PDF PREVIEW */}
       <PDFPreview open={previewOpen} onClose={() => setPreviewOpen(false)} data={previewData} />
@@ -352,6 +380,24 @@ const CBATab = () => {
 };
 
 export default CBATab;
+
+/* ---------- UI HELPERS ---------- */
+
+const SectionTitle = ({ title }) => (
+  <Box sx={{flex: 0.5}}>
+    <Typography fontWeight={600} fontSize={'0.9375vw'} color="#1f3a8a">
+      {title}
+    </Typography>
+    <Box
+      mt={'0.2083vw'}
+      sx={{
+        height: '0.1042vw',
+        width: "60%",
+        background: "#cbd5e1",
+      }}
+    />
+  </Box>
+);
 
 
 /* ================= DATA ================= */

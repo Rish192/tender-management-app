@@ -22,14 +22,15 @@ const TenderOverview = () => {
       <Sidebar />
 
       {/* ✅ MAIN CONTENT WRAPPER (IMPORTANT) */}
-      <Box p={'1.25vw'} pt={'0.8333vw'} bgcolor={colors.background} minWidth={0} 
+      <Box bgcolor={colors.background}
         sx={{display: 'flex', flex: 1, flexDirection: 'column',
-          overflow: 'auto',
-          scrollbarWidth: 'thin',
-          '&::-webkit-scrollbar': { width: '0.2083vw' },
-          '&::-webkit-scrollbar-track': { background: 'transparent' },
-          '&::-webkit-scrollbar-thumb': { borderRadius: '3px' },
-          scrollbarColor: '#5fb2e2ff transparent'
+          p: '1.25vw', pt: '0.8333vw', minWidth: 0,
+          overflow: 'hidden', height: '100%', border: '1px solid green'
+          // scrollbarWidth: 'thin',
+          // '&::-webkit-scrollbar': { width: '0.2083vw' },
+          // '&::-webkit-scrollbar-track': { background: 'transparent' },
+          // '&::-webkit-scrollbar-thumb': { borderRadius: '3px' },
+          // scrollbarColor: '#5fb2e2ff transparent'
       }}>
 
         {/* ✅ HEADER + TABS (SAME ROW) */}
@@ -78,7 +79,7 @@ const TenderOverview = () => {
         </Box>
 
         {/* TAB CONTENT */}
-        <Box mt={'1.25vw'} sx={{flex: 1}}>
+        <Box mt={'1.25vw'} sx={{flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column'}}>
           {tab === "overview" && <OverviewTab tender={tender} />}
           {tab === "cba" && <CBATab />}
           {tab === "cs" && <ComparativeTab />}

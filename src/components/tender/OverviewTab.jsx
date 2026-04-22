@@ -68,7 +68,7 @@ const OverviewTab = ({ tender }) => {
   };
   
   return (
-    <Box sx={{height: '100%', display: 'flex', flexDirection: 'column', gap: '2.0833vw' }}>
+    <Box sx={{height: '100%', display: 'flex', flexDirection: 'column', gap: '2.0833vw'}}>
 
       {/* ================= TOP ================= */}
       <Box display="flex" gap={'1.667vw'}>
@@ -105,28 +105,26 @@ const OverviewTab = ({ tender }) => {
       </Box>
 
       {/* ================= BOTTOM ================= */}
-      <Box sx={{flex: 1}}>
-      <SectionTitle title="Tender Status" />
+      <Box>
+        <SectionTitle title="Tender Status" />
 
-      <Box
-          mt={'0.8333vw'}
-          sx={{
-          background: "#eef2f7",
-          borderRadius: "16px",
-          p: '1.25vw',
-          boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-          }}
-      >
-          <Box display="flex" alignItems="stretch">
-            <BarChart title="Net Worth Status" />
-            <Divider />
+        <Box sx={{
+            background: "#eef2f7",
+            borderRadius: "16px",
+            mt: '0.8333vw',
+            p: '1.25vw',
+            boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+        }}>
+            <Box display="flex" alignItems="stretch">
+              <BarChart title="Net Worth Status" />
+              <Divider />
 
-            <BarChart title="Average Annual Turnover Status" />
-            <Divider />
+              <BarChart title="Average Annual Turnover Status" />
+              <Divider />
 
-            <BarChart title="Working Capital Status" />
-          </Box>
-      </Box>
+              <BarChart title="Working Capital Status" />
+            </Box>
+        </Box>
       </Box>
     </Box>
   );
